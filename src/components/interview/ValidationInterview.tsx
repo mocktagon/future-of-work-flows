@@ -7,10 +7,17 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { CheckCircle, MessageCircle, Volume2, Target, Users, TrendingUp, BookOpen, Settings } from 'lucide-react';
+import { InterviewPhaseData, OrganizationData, ResponseData, TaskData } from '@/types/interview';
 
-const ValidationInterview = ({ onComplete, previousPhaseData, organizationData }) => {
+interface ValidationInterviewProps {
+  onComplete: (data: any) => void;
+  previousPhaseData?: InterviewPhaseData[];
+  organizationData?: OrganizationData;
+}
+
+const ValidationInterview: React.FC<ValidationInterviewProps> = ({ onComplete, previousPhaseData, organizationData }) => {
   const [currentSection, setCurrentSection] = useState(0);
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState<Record<string, ResponseData>>({});
   const [currentResponse, setCurrentResponse] = useState('');
 
   const interviewSections = [
@@ -112,8 +119,11 @@ const ValidationInterview = ({ onComplete, previousPhaseData, organizationData }
 
   // Generate summary insights from previous phases
   const generateAssessmentSummary = () => {
-    const taskData = previousPhaseData?.find(phase => phase.taskRatings)?.taskRatings || {};
-    const tasks = Object.values(taskData);
+    const taskData = Array.isArray(previousPhaseData) ? 
+      previousPhaseData.find(phase => phase.taskRatings)?.taskRatings || {} :
+      previousPhaseData?.taskRatings || {};
+    
+    const tasks = Object.values(taskData) as TaskData[];
     
     const highAutomationTasks = tasks.filter(t => t.automationDesire >= 4);
     const highHASTasks = tasks.filter(t => t.humanAgencyScale >= 3);
@@ -191,7 +201,7 @@ const ValidationInterview = ({ onComplete, previousPhaseData, organizationData }
     });
   };
 
-  const generateActionPlan = (responses) => {
+  const generateActionPlan = (responses: Record<string, ResponseData>) => {
     const responseValues = Object.values(responses);
     
     // Extract key themes from responses

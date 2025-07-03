@@ -8,10 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Star, MessageCircle, Volume2, CheckCircle } from 'lucide-react';
+import { TaskData, InterviewPhaseData } from '@/types/interview';
 
-const DeepDiveInterview = ({ onComplete, previousPhaseData }) => {
+interface DeepDiveInterviewProps {
+  onComplete: (data: any) => void;
+  previousPhaseData?: InterviewPhaseData;
+}
+
+const DeepDiveInterview: React.FC<DeepDiveInterviewProps> = ({ onComplete, previousPhaseData }) => {
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-  const [taskRatings, setTaskRatings] = useState({});
+  const [taskRatings, setTaskRatings] = useState<Record<string, TaskData>>({});
   const [currentRatings, setCurrentRatings] = useState({
     automationDesire: [3],
     humanAgencyScale: [3],
@@ -63,7 +69,7 @@ const DeepDiveInterview = ({ onComplete, previousPhaseData }) => {
 
   const handleTaskComplete = () => {
     // Save current task ratings
-    const taskData = {
+    const taskData: TaskData = {
       task: currentTask,
       automationDesire: currentRatings.automationDesire[0],
       humanAgencyScale: currentRatings.humanAgencyScale[0],
@@ -126,7 +132,7 @@ const DeepDiveInterview = ({ onComplete, previousPhaseData }) => {
     });
   };
 
-  const analyzeTaskData = (taskData) => {
+  const analyzeTaskData = (taskData: Record<string, TaskData>) => {
     const tasks = Object.values(taskData);
     
     // Categorize tasks into zones

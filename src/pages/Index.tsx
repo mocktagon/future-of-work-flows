@@ -13,12 +13,13 @@ import RefinementInterview from '@/components/interview/RefinementInterview';
 import ValidationInterview from '@/components/interview/ValidationInterview';
 import ReportsDashboard from '@/components/reports/ReportsDashboard';
 import { Circle, Square, Triangle, Star, Hexagon, CheckCircle, Clock, Play } from 'lucide-react';
+import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
 const Index = () => {
   const [currentPhase, setCurrentPhase] = useState(0);
-  const [organizationData, setOrganizationData] = useState(null);
-  const [employeeData, setEmployeeData] = useState({});
-  const [interviewProgress, setInterviewProgress] = useState({});
+  const [organizationData, setOrganizationData] = useState<OrganizationData | null>(null);
+  const [employeeData, setEmployeeData] = useState<Record<string, InterviewPhaseData>>({});
+  const [interviewProgress, setInterviewProgress] = useState<Record<number, string>>({});
 
   const phases = [
     {
@@ -79,7 +80,7 @@ const Index = () => {
     }
   ];
 
-  const handlePhaseComplete = (phaseId, data) => {
+  const handlePhaseComplete = (phaseId: number, data: any) => {
     console.log(`Phase ${phaseId} completed with data:`, data);
     
     if (phaseId === 0) {
@@ -96,13 +97,13 @@ const Index = () => {
     }
   };
 
-  const getPhaseStatus = (phaseId) => {
+  const getPhaseStatus = (phaseId: number) => {
     if (phaseId < currentPhase) return 'completed';
     if (phaseId === currentPhase) return 'active';
     return 'pending';
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed': return <CheckCircle className="h-5 w-5 text-green-600" />;
       case 'active': return <Play className="h-5 w-5 text-blue-600" />;
@@ -110,7 +111,7 @@ const Index = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800 border-green-200';
       case 'active': return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -119,6 +120,9 @@ const Index = () => {
   };
 
   const CurrentComponent = phases[currentPhase]?.component;
+
+  // Convert employeeData to array for phases that expect previousPhaseData array
+  const previousPhaseDataArray = Object.values(employeeData);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -215,10 +219,10 @@ const Index = () => {
           <CardContent className="p-6">
             {CurrentComponent && (
               <CurrentComponent
-                onComplete={(data) => handlePhaseComplete(currentPhase, data)}
+                onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
                 organizationData={organizationData}
                 employeeData={employeeData}
-                previousPhaseData={employeeData[`phase_${currentPhase - 1}`]}
+                previousPhaseData={currentPhase === 5 ? previousPhaseDataArray : employeeData[`phase_${currentPhase - 1}`]}
               />
             )}
           </CardContent>

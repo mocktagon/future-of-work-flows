@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,8 +7,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Square, Shield, Clock, MessageCircle, Users } from 'lucide-react';
+import { OrganizationData, EmployeeData } from '@/types/interview';
 
-const EmployeeOnboarding = ({ onComplete, organizationData }) => {
+interface EmployeeOnboardingProps {
+  onComplete: (data: EmployeeData) => void;
+  organizationData?: OrganizationData;
+}
+
+const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, organizationData }) => {
   const [employeeName, setEmployeeName] = useState('');
   const [hasConsented, setHasConsented] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -120,7 +125,7 @@ const EmployeeOnboarding = ({ onComplete, organizationData }) => {
             <Checkbox
               id="consent"
               checked={hasConsented}
-              onCheckedChange={setHasConsented}
+              onCheckedChange={(checked) => setHasConsented(checked === true)}
             />
             <Label htmlFor="consent" className="text-sm">
               I agree to participate in this AI readiness assessment and consent to the use of 

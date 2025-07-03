@@ -7,10 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Hexagon, MessageCircle, Volume2, TrendingUp, AlertTriangle, CheckCircle, Lightbulb } from 'lucide-react';
+import { InterviewPhaseData, TaskData, ResponseData } from '@/types/interview';
 
-const RefinementInterview = ({ onComplete, previousPhaseData }) => {
+interface RefinementInterviewProps {
+  onComplete: (data: any) => void;
+  previousPhaseData?: InterviewPhaseData;
+}
+
+const RefinementInterview: React.FC<RefinementInterviewProps> = ({ onComplete, previousPhaseData }) => {
   const [currentSection, setCurrentSection] = useState(0);
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState<Record<string, ResponseData>>({});
   const [currentResponse, setCurrentResponse] = useState('');
 
   // Extract analysis from previous phase
@@ -50,7 +56,7 @@ const RefinementInterview = ({ onComplete, previousPhaseData }) => {
     }
   ];
 
-  function generateTaskReviewContent(taskData, analysisResults) {
+  function generateTaskReviewContent(taskData: Record<string, TaskData>, analysisResults: any) {
     const greenLightTasks = analysisResults.taskCategorization?.greenLight || [];
     const redLightTasks = analysisResults.taskCategorization?.redLight || [];
     const rndTasks = analysisResults.taskCategorization?.rndOpportunity || [];
@@ -77,7 +83,7 @@ const RefinementInterview = ({ onComplete, previousPhaseData }) => {
     };
   }
 
-  function generateHASDiscussionContent(taskData) {
+  function generateHASDiscussionContent(taskData: Record<string, TaskData>) {
     const tasks = Object.values(taskData);
     const highHASTasks = tasks.filter(t => t.humanAgencyScale >= 3);
     
@@ -134,7 +140,7 @@ const RefinementInterview = ({ onComplete, previousPhaseData }) => {
     };
   }
 
-  function generateScenarioContent(taskData) {
+  function generateScenarioContent(taskData: Record<string, TaskData>) {
     const greenLightTasks = Object.values(taskData).filter(t => t.automationDesire >= 4);
     const rndTasks = Object.values(taskData).filter(t => t.automationDesire >= 4 && t.humanAgencyScale >= 3);
 
@@ -217,7 +223,7 @@ const RefinementInterview = ({ onComplete, previousPhaseData }) => {
     });
   };
 
-  const analyzeRefinementData = (responses) => {
+  const analyzeRefinementData = (responses: Record<string, ResponseData>) => {
     const responseValues = Object.values(responses);
     
     return {

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,14 +5,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Triangle, MessageCircle, Mic, MicOff, Volume2 } from 'lucide-react';
+import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
-const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) => {
+interface InitialInterviewProps {
+  onComplete: (data: any) => void;
+  organizationData?: OrganizationData;
+  previousPhaseData?: InterviewPhaseData;
+}
+
+const InitialInterview: React.FC<InitialInterviewProps> = ({ onComplete, organizationData, previousPhaseData }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState<Record<string, string>>({});
   const [isRecording, setIsRecording] = useState(false);
   const [currentResponse, setCurrentResponse] = useState('');
 
-  const employeeName = previousPhaseData?.employeeName || 'there';
+  const employeeName = (previousPhaseData as any)?.employeeName || 'there';
 
   const interviewQuestions = [
     {
@@ -85,7 +91,7 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
     });
   };
 
-  const analyzeResponses = (responses) => {
+  const analyzeResponses = (responses: Record<string, string>) => {
     // Simulate LLM-based topic modeling and analysis
     const themes = {
       commonTasks: extractTasks(responses.main_tasks),
@@ -100,7 +106,7 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
     return themes;
   };
 
-  const extractTasks = (text) => {
+  const extractTasks = (text?: string): string[] => {
     if (!text) return [];
     // Simulate AI task extraction
     const words = text.toLowerCase().split(/[,.\s]+/);
@@ -108,13 +114,13 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
     return taskIndicators.filter(task => words.some(word => word.includes(task)));
   };
 
-  const extractTools = (text) => {
+  const extractTools = (text?: string): string[] => {
     if (!text) return [];
     const commonTools = ['excel', 'word', 'email', 'slack', 'teams', 'salesforce', 'jira', 'confluence', 'powerpoint'];
     return commonTools.filter(tool => text.toLowerCase().includes(tool));
   };
 
-  const categorizeAISentiment = (text) => {
+  const categorizeAISentiment = (text?: string): string => {
     if (!text) return 'neutral';
     const positiveWords = ['helpful', 'efficient', 'useful', 'excited', 'opportunity'];
     const negativeWords = ['worried', 'concerned', 'replace', 'fear', 'uncertain'];
@@ -128,9 +134,9 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
     return 'mixed';
   };
 
-  const extractConcerns = (text) => {
+  const extractConcerns = (text?: string): string[] => {
     if (!text) return [];
-    const concerns = [];
+    const concerns: string[] = [];
     const lowerText = text.toLowerCase();
     
     if (lowerText.includes('job') || lowerText.includes('replace')) concerns.push('job_replacement');
@@ -141,7 +147,7 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
     return concerns;
   };
 
-  const inferCollaborationStyle = (responses) => {
+  const inferCollaborationStyle = (responses: Record<string, string>): string => {
     // Analyze all responses to infer preferred collaboration style
     const allText = Object.values(responses).join(' ').toLowerCase();
     
@@ -255,7 +261,7 @@ const InitialInterview = ({ onComplete, organizationData, previousPhaseData }) =
                   return (
                     <div key={questionId} className="text-xs bg-gray-50 p-2 rounded">
                       <div className="font-medium text-gray-600">{question?.id.replace('_', ' ').toUpperCase()}:</div>
-                      <div className="text-gray-700">{response.substring(0, 100)}...</div>
+                      <div className="text-gray-700">{String(response).substring(0, 100)}...</div>
                     </div>
                   );
                 })}

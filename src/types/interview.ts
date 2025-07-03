@@ -29,6 +29,7 @@ export interface OrganizationData {
 
 export interface EmployeeData {
   employeeName: string;
+  email?: string;
   consentGiven: boolean;
   onboardingCompleted: boolean;
   completedAt: string;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,13 +26,15 @@ const ValidationInterview: React.FC<ValidationInterviewProps> = ({ onComplete, p
     let taskData: Record<string, TaskData> = {};
     
     if (Array.isArray(previousPhaseData)) {
-      const phaseWithTasks = previousPhaseData.find(phase => phase.taskRatings);
+      const phaseWithTasks = previousPhaseData.find(phase => phase && phase.taskRatings);
       taskData = phaseWithTasks?.taskRatings || {};
-    } else if (previousPhaseData?.taskRatings) {
-      taskData = previousPhaseData.taskRatings;
+    } else if (previousPhaseData && 'taskRatings' in previousPhaseData) {
+      taskData = previousPhaseData.taskRatings || {};
     }
     
-    const tasks = Object.values(taskData) as TaskData[];
+    const tasks = Object.values(taskData).filter((task): task is TaskData => 
+      task !== null && task !== undefined && typeof task === 'object'
+    );
     
     const highAutomationTasks = tasks.filter(t => t.automationDesire >= 4);
     const highHASTasks = tasks.filter(t => t.humanAgencyScale >= 3);

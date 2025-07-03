@@ -216,7 +216,10 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
 
         {/* Tab Content */}
         <TabsContent value="individual" className="space-y-4">
-          <IndividualReport data={reportData.individual} />
+          <IndividualReport 
+            employeeData={employeeData} 
+            allPhaseData={Object.values(employeeData) || []} 
+          />
         </TabsContent>
 
         <TabsContent value="department" className="space-y-4">

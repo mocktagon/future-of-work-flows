@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +18,42 @@ const ValidationInterview: React.FC<ValidationInterviewProps> = ({ onComplete, p
   const [currentSection, setCurrentSection] = useState(0);
   const [responses, setResponses] = useState<Record<string, ResponseData>>({});
   const [currentResponse, setCurrentResponse] = useState('');
+
+  // Generate summary insights from previous phases
+  const generateAssessmentSummary = () => {
+    // Handle both array and single object cases
+    let taskData: Record<string, TaskData> = {};
+    
+    if (Array.isArray(previousPhaseData)) {
+      const phaseWithTasks = previousPhaseData.find(phase => phase.taskRatings);
+      taskData = phaseWithTasks?.taskRatings || {};
+    } else if (previousPhaseData?.taskRatings) {
+      taskData = previousPhaseData.taskRatings;
+    }
+    
+    const tasks = Object.values(taskData) as TaskData[];
+    
+    const highAutomationTasks = tasks.filter(t => t.automationDesire >= 4);
+    const highHASTasks = tasks.filter(t => t.humanAgencyScale >= 3);
+    const avgAutomationDesire = tasks.length > 0 ? 
+      tasks.reduce((sum, t) => sum + t.automationDesire, 0) / tasks.length : 3;
+
+    return {
+      totalTasksAssessed: tasks.length,
+      highAutomationDesire: highAutomationTasks.length,
+      strongHumanAgency: highHASTasks.length,
+      averageAutomationDesire: Math.round(avgAutomationDesire * 10) / 10,
+      dominantPreference: avgAutomationDesire > 3 ? 'Automation-Friendly' : 'Human-Centric',
+      keyInsights: [
+        'Preference for AI handling routine, repetitive tasks',
+        'Strong emphasis on human involvement in strategic decisions',
+        'Collaborative approach to AI integration preferred',
+        'Focus on augmentation rather than replacement'
+      ]
+    };
+  };
+
+  const assessmentSummary = generateAssessmentSummary();
 
   const interviewSections = [
     {
@@ -116,36 +151,6 @@ const ValidationInterview: React.FC<ValidationInterviewProps> = ({ onComplete, p
   const currentSectionData = interviewSections[currentSection];
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const currentQuestion = currentSectionData.questions[currentQuestionIndex];
-
-  // Generate summary insights from previous phases
-  const generateAssessmentSummary = () => {
-    const taskData = Array.isArray(previousPhaseData) ? 
-      previousPhaseData.find(phase => phase.taskRatings)?.taskRatings || {} :
-      previousPhaseData?.taskRatings || {};
-    
-    const tasks = Object.values(taskData) as TaskData[];
-    
-    const highAutomationTasks = tasks.filter(t => t.automationDesire >= 4);
-    const highHASTasks = tasks.filter(t => t.humanAgencyScale >= 3);
-    const avgAutomationDesire = tasks.length > 0 ? 
-      tasks.reduce((sum, t) => sum + t.automationDesire, 0) / tasks.length : 3;
-
-    return {
-      totalTasksAssessed: tasks.length,
-      highAutomationDesire: highAutomationTasks.length,
-      strongHumanAgency: highHASTasks.length,
-      averageAutomationDesire: Math.round(avgAutomationDesire * 10) / 10,
-      dominantPreference: avgAutomationDesire > 3 ? 'Automation-Friendly' : 'Human-Centric',
-      keyInsights: [
-        'Preference for AI handling routine, repetitive tasks',
-        'Strong emphasis on human involvement in strategic decisions',
-        'Collaborative approach to AI integration preferred',
-        'Focus on augmentation rather than replacement'
-      ]
-    };
-  };
-
-  const assessmentSummary = generateAssessmentSummary();
 
   const handleResponseSubmit = () => {
     if (currentResponse.trim()) {

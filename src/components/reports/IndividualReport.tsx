@@ -14,7 +14,7 @@ interface IndividualReportProps {
 const IndividualReport: React.FC<IndividualReportProps> = ({ employeeData, allPhaseData }) => {
   // Extract data from phases
   const taskData = allPhaseData.find(phase => phase.taskRatings)?.taskRatings || {};
-  const analysisResults = allPhaseData.find(phase => phase.analysisResults)?.analysisResults || {};
+  const analysisResults = allPhaseData.find(phase => phase.analysisResults)?.analysisResults;
   const validationData = allPhaseData.find(phase => phase.validationComplete) || {};
 
   const tasks = Object.values(taskData) as TaskData[];
@@ -27,9 +27,10 @@ const IndividualReport: React.FC<IndividualReportProps> = ({ employeeData, allPh
   const avgHumanAgencyScale = tasks.length > 0 ? 
     tasks.reduce((sum, t) => sum + t.humanAgencyScale, 0) / tasks.length : 0;
 
-  const greenLightTasks = analysisResults.taskCategorization?.greenLight || [];
-  const redLightTasks = analysisResults.taskCategorization?.redLight || [];
-  const rndTasks = analysisResults.taskCategorization?.rndOpportunity || [];
+  // Safely access taskCategorization with fallbacks
+  const greenLightTasks = analysisResults?.taskCategorization?.greenLight || [];
+  const redLightTasks = analysisResults?.taskCategorization?.redLight || [];
+  const rndTasks = analysisResults?.taskCategorization?.rndOpportunity || [];
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -104,15 +105,16 @@ const IndividualReport: React.FC<IndividualReportProps> = ({ employeeData, allPh
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {Array.isArray(greenLightTasks) && greenLightTasks.map((task, index) => (
-                <div key={index} className="p-3 bg-green-50 rounded border border-green-200">
-                  <div className="font-medium text-green-800">{task.task}</div>
-                  <div className="text-sm text-green-600">
-                    Automation Desire: {task.automationDesire}/5
+              {Array.isArray(greenLightTasks) && greenLightTasks.length > 0 ? (
+                greenLightTasks.map((task, index) => (
+                  <div key={index} className="p-3 bg-green-50 rounded border border-green-200">
+                    <div className="font-medium text-green-800">{task.task}</div>
+                    <div className="text-sm text-green-600">
+                      Automation Desire: {task.automationDesire}/5
+                    </div>
                   </div>
-                </div>
-              ))}
-              {(!Array.isArray(greenLightTasks) || greenLightTasks.length === 0) && (
+                ))
+              ) : (
                 <p className="text-sm text-gray-500">No tasks identified in this category</p>
               )}
             </div>
@@ -130,15 +132,16 @@ const IndividualReport: React.FC<IndividualReportProps> = ({ employeeData, allPh
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {Array.isArray(redLightTasks) && redLightTasks.map((task, index) => (
-                <div key={index} className="p-3 bg-red-50 rounded border border-red-200">
-                  <div className="font-medium text-red-800">{task.task}</div>
-                  <div className="text-sm text-red-600">
-                    Automation Desire: {task.automationDesire}/5
+              {Array.isArray(redLightTasks) && redLightTasks.length > 0 ? (
+                redLightTasks.map((task, index) => (
+                  <div key={index} className="p-3 bg-red-50 rounded border border-red-200">
+                    <div className="font-medium text-red-800">{task.task}</div>
+                    <div className="text-sm text-red-600">
+                      Automation Desire: {task.automationDesire}/5
+                    </div>
                   </div>
-                </div>
-              ))}
-              {(!Array.isArray(redLightTasks) || redLightTasks.length === 0) && (
+                ))
+              ) : (
                 <p className="text-sm text-gray-500">No tasks identified in this category</p>
               )}
             </div>
@@ -156,15 +159,16 @@ const IndividualReport: React.FC<IndividualReportProps> = ({ employeeData, allPh
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {Array.isArray(rndTasks) && rndTasks.map((task, index) => (
-                <div key={index} className="p-3 bg-blue-50 rounded border border-blue-200">
-                  <div className="font-medium text-blue-800">{task.task}</div>
-                  <div className="text-sm text-blue-600">
-                    Automation Desire: {task.automationDesire}/5
+              {Array.isArray(rndTasks) && rndTasks.length > 0 ? (
+                rndTasks.map((task, index) => (
+                  <div key={index} className="p-3 bg-blue-50 rounded border border-blue-200">
+                    <div className="font-medium text-blue-800">{task.task}</div>
+                    <div className="text-sm text-blue-600">
+                      Automation Desire: {task.automationDesire}/5
+                    </div>
                   </div>
-                </div>
-              ))}
-              {(!Array.isArray(rndTasks) || rndTasks.length === 0) && (
+                ))
+              ) : (
                 <p className="text-sm text-gray-500">No tasks identified in this category</p>
               )}
             </div>

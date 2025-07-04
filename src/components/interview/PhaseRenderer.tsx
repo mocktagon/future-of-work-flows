@@ -1,3 +1,4 @@
+
 import React from 'react';
 import OrganizationSetup from '@/components/interview/OrganizationSetup';
 import EmployeeOnboarding from '@/components/interview/EmployeeOnboarding';
@@ -41,12 +42,22 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     onComplete
   };
 
-  // Components that don't need previousPhaseData at all
-  if (currentPhase === 0 || currentPhase === 1 || currentPhase === 6) {
+  // Phase 0 (OrganizationSetup) - only needs onComplete
+  if (currentPhase === 0) {
+    return <CurrentComponent onComplete={onComplete} />;
+  }
+
+  // Phase 1 (EmployeeOnboarding) - needs base props but no previousPhaseData
+  if (currentPhase === 1) {
     return <CurrentComponent {...baseProps} />;
   }
 
-  // Phase 5 (ValidationInterview) expects array of previous phase data
+  // Phase 6 (ReportsDashboard) - needs base props but no previousPhaseData
+  if (currentPhase === 6) {
+    return <CurrentComponent {...baseProps} />;
+  }
+
+  // Phase 5 (ValidationInterview) - expects array of previous phase data
   if (currentPhase === 5) {
     const previousPhaseDataArray = Object.values(employeeData);
     return <CurrentComponent {...baseProps} previousPhaseData={previousPhaseDataArray} />;

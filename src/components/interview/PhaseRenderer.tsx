@@ -35,18 +35,26 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     case 1:
       return (
         <EmployeeOnboarding 
-          organizationData={organizationData}
-          employeeData={employeeData}
           onComplete={onComplete}
         />
       );
     
     case 2:
+      // EmployeeUpload expects different props based on its interface
+      const handleEmployeeListChange = (employees: any[]) => {
+        console.log('Employee list changed:', employees);
+      };
+      
+      const handleSelectedEmployeeChange = (employee: string) => {
+        console.log('Selected employee changed:', employee);
+      };
+      
       return (
         <EmployeeUpload 
-          organizationData={organizationData}
-          employeeData={employeeData}
-          onComplete={onComplete}
+          employeeList={[]}
+          selectedEmployee=""
+          onEmployeeListChange={handleEmployeeListChange}
+          onSelectedEmployeeChange={handleSelectedEmployeeChange}
         />
       );
     
@@ -63,6 +71,7 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
       return (
         <InitialInterview 
           onComplete={onComplete}
+          organizationData={organizationData}
           previousPhaseData={previousPhaseData[0]}
         />
       );
@@ -70,7 +79,6 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     case 5:
       return (
         <DeepDiveInterview 
-          employeeData={employeeData}
           onComplete={onComplete}
           previousPhaseData={previousPhaseData[0]}
         />
@@ -79,7 +87,6 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     case 6:
       return (
         <RefinementInterview 
-          employeeData={employeeData}
           onComplete={onComplete}
           previousPhaseData={previousPhaseData[0]}
         />

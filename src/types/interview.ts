@@ -1,4 +1,3 @@
-
 // Interview data types
 export interface TaskData {
   task: string;
@@ -24,7 +23,6 @@ export interface OrganizationData {
   totalEmployees: number;
   industry: string;
   departments: string[];
-  primaryGoals: string[];
 }
 
 export interface EmployeeData {

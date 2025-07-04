@@ -15,8 +15,7 @@ const OrganizationSetup = ({ onComplete }) => {
     organizationName: '',
     totalEmployees: '',
     industry: '',
-    departments: [],
-    goals: []
+    departments: []
   });
 
   const industries = [
@@ -46,32 +45,12 @@ const OrganizationSetup = ({ onComplete }) => {
     'Research & Development'
   ];
 
-  const goalOptions = [
-    'Productivity Improvement',
-    'Cost Reduction',
-    'Innovation',
-    'Workforce Transformation',
-    'Upskilling',
-    'Competitive Advantage',
-    'Quality Enhancement',
-    'Process Automation'
-  ];
-
   const handleDepartmentChange = (dept, checked) => {
     setFormData(prev => ({
       ...prev,
       departments: checked 
         ? [...prev.departments, dept]
         : prev.departments.filter(d => d !== dept)
-    }));
-  };
-
-  const handleGoalChange = (goal, checked) => {
-    setFormData(prev => ({
-      ...prev,
-      goals: checked 
-        ? [...prev.goals, goal]
-        : prev.goals.filter(g => g !== goal)
     }));
   };
 
@@ -84,8 +63,7 @@ const OrganizationSetup = ({ onComplete }) => {
   const isFormValid = formData.organizationName && 
                      formData.totalEmployees && 
                      formData.industry && 
-                     formData.departments.length > 0 && 
-                     formData.goals.length > 0;
+                     formData.departments.length > 0;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -185,45 +163,6 @@ const OrganizationSetup = ({ onComplete }) => {
                   {formData.departments.map((dept) => (
                     <Badge key={dept} variant="secondary">
                       {dept}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Goals */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Primary Goals of AI Readiness Assessment *</CardTitle>
-            <CardDescription>
-              Select the main objectives for this assessment (multiple selections allowed)
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {goalOptions.map((goal) => (
-                <div key={goal} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`goal-${goal}`}
-                    checked={formData.goals.includes(goal)}
-                    onCheckedChange={(checked) => handleGoalChange(goal, checked)}
-                  />
-                  <Label htmlFor={`goal-${goal}`} className="text-sm">
-                    {goal}
-                  </Label>
-                </div>
-              ))}
-            </div>
-            
-            {formData.goals.length > 0 && (
-              <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-2">Selected goals:</p>
-                <div className="flex flex-wrap gap-2">
-                  {formData.goals.map((goal) => (
-                    <Badge key={goal} variant="outline">
-                      {goal}
                     </Badge>
                   ))}
                 </div>

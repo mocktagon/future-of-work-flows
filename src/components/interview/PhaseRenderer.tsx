@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { OrganizationSetup } from './OrganizationSetup';
-import { EmployeeOnboarding } from './EmployeeOnboarding';
-import { EmployeeUpload } from './EmployeeUpload';
-import { ValidationInterview } from './ValidationInterview';
-import { InitialInterview } from './InitialInterview';
-import { DeepDiveInterview } from './DeepDiveInterview';
-import { RefinementInterview } from './RefinementInterview';
+import OrganizationSetup from './OrganizationSetup';
+import EmployeeOnboarding from './EmployeeOnboarding';
+import EmployeeUpload from './EmployeeUpload';
+import ValidationInterview from './ValidationInterview';
+import InitialInterview from './InitialInterview';
+import DeepDiveInterview from './DeepDiveInterview';
+import RefinementInterview from './RefinementInterview';
 import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
 interface PhaseRendererProps {
@@ -22,7 +22,6 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
   employeeData,
   onComplete
 }) => {
-  // Convert employeeData to array for components that expect it
   const previousPhaseData = Object.values(employeeData);
 
   switch (currentPhase) {
@@ -90,3 +89,5 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
       return <div>Unknown phase</div>;
   }
 };
+
+export default PhaseRenderer;

@@ -26,19 +26,19 @@ export const HeroSection = () => {
           <div className="flex items-center justify-center mb-8">
             <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 px-6 py-3 text-sm font-semibold rounded-full shadow-lg backdrop-blur-sm">
               <Sparkles className="w-4 h-4 mr-2" />
-              AI Readiness Assessment 2024
+              AI Readiness Assessment 2025
             </Badge>
           </div>
           
           <h1 className="text-7xl font-bold mb-8 leading-tight">
-            <span className="text-gray-900">Don't Let AI Leave You</span>
+            <span className="text-gray-900">The World is Adopting AI</span>
             <br />
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">Behind</span>
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">At Crazy Pace</span>
           </h1>
           
           <p className="text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto font-light">
-            While your competitors gain <span className="font-semibold text-blue-600">40% efficiency</span> through AI, discover exactly where and how 
-            to implement AI in your organization—in just <span className="font-semibold text-purple-600">60 minutes</span>.
+            This is your <span className="font-semibold text-blue-600">first step</span> towards AI transformation. 
+            Discover exactly where and how to implement AI in your organization—in just <span className="font-semibold text-purple-600">60 minutes</span>.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">

@@ -236,12 +236,22 @@ const Index = () => {
           </CardHeader>
           <CardContent className="p-6">
             {CurrentComponent && (
-              <CurrentComponent
-                onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
-                organizationData={organizationData}
-                employeeData={employeeData}
-                previousPhaseData={currentPhase === 5 ? previousPhaseDataArray : employeeData[`phase_${currentPhase - 1}`]}
-              />
+              <>
+                {currentPhase === 1 ? (
+                  <CurrentComponent
+                    onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
+                    organizationData={organizationData}
+                    employeeData={employeeData}
+                  />
+                ) : (
+                  <CurrentComponent
+                    onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
+                    organizationData={organizationData}
+                    employeeData={employeeData}
+                    previousPhaseData={currentPhase === 5 ? previousPhaseDataArray : employeeData[`phase_${currentPhase - 1}`]}
+                  />
+                )}
+              </>
             )}
           </CardContent>
         </Card>

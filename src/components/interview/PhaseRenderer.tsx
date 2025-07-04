@@ -1,85 +1,92 @@
 
 import React from 'react';
-import OrganizationSetup from '@/components/interview/OrganizationSetup';
-import EmployeeOnboarding from '@/components/interview/EmployeeOnboarding';
-import InitialInterview from '@/components/interview/InitialInterview';
-import DeepDiveInterview from '@/components/interview/DeepDiveInterview';
-import RefinementInterview from '@/components/interview/RefinementInterview';
-import ValidationInterview from '@/components/interview/ValidationInterview';
-import ReportsDashboard from '@/components/reports/ReportsDashboard';
+import { OrganizationSetup } from './OrganizationSetup';
+import { EmployeeOnboarding } from './EmployeeOnboarding';
+import { EmployeeUpload } from './EmployeeUpload';
+import { ValidationInterview } from './ValidationInterview';
+import { InitialInterview } from './InitialInterview';
+import { DeepDiveInterview } from './DeepDiveInterview';
+import { RefinementInterview } from './RefinementInterview';
 import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
 interface PhaseRendererProps {
   currentPhase: number;
-  onComplete: (data: any) => void;
   organizationData: OrganizationData | null;
   employeeData: Record<string, InterviewPhaseData>;
+  onComplete: (data: any) => void;
 }
 
-const PhaseRenderer: React.FC<PhaseRendererProps> = ({ 
-  currentPhase, 
-  onComplete, 
-  organizationData, 
-  employeeData 
+export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
+  currentPhase,
+  organizationData,
+  employeeData,
+  onComplete
 }) => {
-  // Phase 0 (OrganizationSetup) - only needs onComplete
-  if (currentPhase === 0) {
-    return <OrganizationSetup onComplete={onComplete} />;
-  }
+  // Convert employeeData to array for components that expect it
+  const previousPhaseData = Object.values(employeeData);
 
-  // Phase 1 (EmployeeOnboarding) - only needs onComplete
-  if (currentPhase === 1) {
-    return <EmployeeOnboarding onComplete={onComplete} />;
+  switch (currentPhase) {
+    case 0:
+      return (
+        <OrganizationSetup 
+          onComplete={onComplete}
+        />
+      );
+    
+    case 1:
+      return (
+        <EmployeeOnboarding 
+          organizationData={organizationData}
+          employeeData={employeeData}
+          onComplete={onComplete}
+        />
+      );
+    
+    case 2:
+      return (
+        <EmployeeUpload 
+          organizationData={organizationData}
+          employeeData={employeeData}
+          onComplete={onComplete}
+        />
+      );
+    
+    case 3:
+      return (
+        <ValidationInterview 
+          organizationData={organizationData}
+          onComplete={onComplete}
+          previousPhaseData={previousPhaseData}
+        />
+      );
+    
+    case 4:
+      return (
+        <InitialInterview 
+          onComplete={onComplete}
+          previousPhaseData={previousPhaseData[0]}
+        />
+      );
+    
+    case 5:
+      return (
+        <DeepDiveInterview 
+          employeeData={employeeData}
+          onComplete={onComplete}
+          previousPhaseData={previousPhaseData[0]}
+        />
+      );
+    
+    case 6:
+      return (
+        <RefinementInterview 
+          employeeData={employeeData}
+          onComplete={onComplete}
+          previousPhaseData={previousPhaseData[0]}
+        />
+      );
+    
+    default:
+      return <div>Unknown phase</div>;
   }
-
-  // Phase 2 (InitialInterview) - needs onComplete, organizationData, and previousPhaseData
-  if (currentPhase === 2) {
-    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-    return <InitialInterview 
-      onComplete={onComplete}
-      organizationData={organizationData}
-      previousPhaseData={previousPhaseData} 
-    />;
-  }
-
-  // Phase 3 (DeepDiveInterview) - needs onComplete and previousPhaseData
-  if (currentPhase === 3) {
-    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-    return <DeepDiveInterview 
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseData} 
-    />;
-  }
-
-  // Phase 4 (RefinementInterview) - needs onComplete and previousPhaseData
-  if (currentPhase === 4) {
-    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-    return <RefinementInterview 
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseData} 
-    />;
-  }
-
-  // Phase 5 (ValidationInterview) - needs onComplete, organizationData, and previousPhaseData array
-  if (currentPhase === 5) {
-    const previousPhaseDataArray = Object.values(employeeData);
-    return <ValidationInterview 
-      onComplete={onComplete}
-      organizationData={organizationData}
-      previousPhaseData={previousPhaseDataArray} 
-    />;
-  }
-
-  // Phase 6 (ReportsDashboard) - needs organizationData, employeeData, and onComplete
-  if (currentPhase === 6) {
-    return <ReportsDashboard 
-      organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete} 
-    />;
-  }
-
-  return null;
 };
-
-export default PhaseRenderer;

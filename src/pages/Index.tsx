@@ -144,12 +144,17 @@ const Index = () => {
       return <CurrentComponent {...baseProps} />;
     }
 
+    // Phase 6 (ReportsDashboard) doesn't need previousPhaseData
+    if (currentPhase === 6) {
+      return <CurrentComponent {...baseProps} />;
+    }
+
     // Phase 5 (ValidationInterview) expects array of previous phase data
     if (currentPhase === 5) {
       return <CurrentComponent {...baseProps} previousPhaseData={previousPhaseDataArray} />;
     }
 
-    // Other phases expect single previous phase data
+    // Other phases (2, 3, 4) expect single previous phase data
     return <CurrentComponent {...baseProps} previousPhaseData={employeeData[`phase_${currentPhase - 1}`]} />;
   };
 

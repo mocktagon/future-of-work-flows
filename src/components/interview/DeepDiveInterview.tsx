@@ -1,13 +1,10 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { Star, MessageCircle, Volume2, CheckCircle } from 'lucide-react';
+import { Star, MessageCircle, Mic, CheckCircle } from 'lucide-react';
 import { TaskData, InterviewPhaseData } from '@/types/interview';
 
 interface DeepDiveInterviewProps {
@@ -16,146 +13,81 @@ interface DeepDiveInterviewProps {
 }
 
 const DeepDiveInterview: React.FC<DeepDiveInterviewProps> = ({ onComplete, previousPhaseData }) => {
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-  const [taskRatings, setTaskRatings] = useState<Record<string, TaskData>>({});
-  const [currentRatings, setCurrentRatings] = useState({
-    automationDesire: [3],
-    humanAgencyScale: [3],
-    timePercentage: [20],
-    familiarityLevel: [2]
-  });
-  const [currentReasonings, setCurrentReasonings] = useState({
-    automationReason: '',
-    hasReason: ''
-  });
-
-  // Extract tasks from previous phase data
-  const extractedTasks = previousPhaseData?.extractedThemes?.commonTasks || 
-    ['Email Management', 'Report Creation', 'Data Analysis', 'Meeting Coordination', 'Customer Communication'];
-
-  // Add some additional realistic tasks based on common patterns
-  const allTasks = [
-    ...extractedTasks,
-    'Document Review',
-    'Project Planning',
-    'Quality Assurance',
-    'Team Communication',
-    'Process Documentation'
-  ].slice(0, 8); // Limit to 8 tasks for demo
-
-  const currentTask = allTasks[currentTaskIndex];
-
-  const automationDesireLabels = [
-    'Not at all',
-    'Slightly',
-    'Moderately', 
-    'A lot',
-    'Entirely'
-  ];
-
-  const hasLabels = [
-    'AI handles entirely (H1)',
-    'Minimal human input (H2)',
-    'Equal partnership (H3)',
-    'AI requires human input (H4)',
-    'Fully relies on your involvement (H5)'
-  ];
-
-  const familiarityLabels = [
-    'Novice',
-    'Average',
-    'Expert'
-  ];
-
-  const handleTaskComplete = () => {
-    // Save current task ratings
-    const taskData: TaskData = {
-      task: currentTask,
-      automationDesire: currentRatings.automationDesire[0],
-      humanAgencyScale: currentRatings.humanAgencyScale[0],
-      timePercentage: currentRatings.timePercentage[0],
-      familiarityLevel: currentRatings.familiarityLevel[0],
-      automationReason: currentReasonings.automationReason,
-      hasReason: currentReasonings.hasReason,
-      completedAt: new Date().toISOString()
-    };
-
-    setTaskRatings(prev => ({
-      ...prev,
-      [currentTask]: taskData
-    }));
-
-    // Reset for next task
-    setCurrentRatings({
-      automationDesire: [3],
-      humanAgencyScale: [3],
-      timePercentage: [20],
-      familiarityLevel: [2]
-    });
-    setCurrentReasonings({
-      automationReason: '',
-      hasReason: ''
-    });
-
-    if (currentTaskIndex < allTasks.length - 1) {
-      setCurrentTaskIndex(currentTaskIndex + 1);
-    } else {
-      // Complete the deep dive interview
-      completeInterview();
-    }
-  };
-
-  const completeInterview = () => {
-    // Include the current task data
-    const finalTaskData = {
-      ...taskRatings,
-      [currentTask]: {
-        task: currentTask,
-        automationDesire: currentRatings.automationDesire[0],
-        humanAgencyScale: currentRatings.humanAgencyScale[0],
-        timePercentage: currentRatings.timePercentage[0],
-        familiarityLevel: currentRatings.familiarityLevel[0],
-        automationReason: currentReasonings.automationReason,
-        hasReason: currentReasonings.hasReason,
+  const handleComplete = () => {
+    // Generate dummy task data
+    const dummyTaskData = {
+      'Email Management': {
+        task: 'Email Management',
+        automationDesire: 4,
+        humanAgencyScale: 1,
+        timePercentage: 25,
+        familiarityLevel: 2,
+        automationReason: 'Very repetitive and time-consuming. AI could handle routine responses and prioritization.',
+        hasReason: 'Most emails can be processed automatically with minimal human oversight.',
+        completedAt: new Date().toISOString()
+      },
+      'Project Planning': {
+        task: 'Project Planning',
+        automationDesire: 2,
+        humanAgencyScale: 4,
+        timePercentage: 30,
+        familiarityLevel: 2,
+        automationReason: 'Requires strategic thinking and stakeholder understanding that AI might miss.',
+        hasReason: 'Critical decisions and stakeholder relationships need human judgment and context.',
+        completedAt: new Date().toISOString()
+      },
+      'Status Reporting': {
+        task: 'Status Reporting',
+        automationDesire: 4,
+        humanAgencyScale: 2,
+        timePercentage: 20,
+        familiarityLevel: 2,
+        automationReason: 'Data compilation and formatting is very repetitive and could be automated.',
+        hasReason: 'Some human review needed for context and exceptions, but mostly automatable.',
+        completedAt: new Date().toISOString()
+      },
+      'Team Mentoring': {
+        task: 'Team Mentoring',
+        automationDesire: 0,
+        humanAgencyScale: 4,
+        timePercentage: 15,
+        familiarityLevel: 2,
+        automationReason: 'This is purely human work that requires empathy and personal connection.',
+        hasReason: 'Personal development and relationship building cannot be delegated to AI.',
+        completedAt: new Date().toISOString()
+      },
+      'Data Analysis': {
+        task: 'Data Analysis',
+        automationDesire: 3,
+        humanAgencyScale: 3,
+        timePercentage: 10,
+        familiarityLevel: 1,
+        automationReason: 'AI could help with pattern recognition, but interpretation needs human insight.',
+        hasReason: 'Equal partnership where AI processes data and human provides business context.',
         completedAt: new Date().toISOString()
       }
     };
 
-    // Analyze the task data to create insights
-    const analysisResults = analyzeTaskData(finalTaskData);
-
-    onComplete({
-      taskRatings: finalTaskData,
-      analysisResults,
-      interviewCompleted: true,
-      completedAt: new Date().toISOString()
-    });
-  };
-
-  const analyzeTaskData = (taskData: Record<string, TaskData>) => {
-    const tasks = Object.values(taskData);
-    
-    // Categorize tasks into zones
+    // Analyze the task data
+    const tasks = Object.values(dummyTaskData);
     const greenLightTasks = tasks.filter(t => t.automationDesire >= 4);
     const redLightTasks = tasks.filter(t => t.automationDesire <= 2);
-    const rndOpportunityTasks = tasks.filter(t => t.automationDesire >= 4 && t.humanAgencyScale >= 4);
+    const rndOpportunityTasks = tasks.filter(t => t.automationDesire >= 3 && t.humanAgencyScale >= 3);
     
-    // Calculate average scores
     const avgAutomationDesire = tasks.reduce((sum, t) => sum + t.automationDesire, 0) / tasks.length;
     const avgHumanAgencyScale = tasks.reduce((sum, t) => sum + t.humanAgencyScale, 0) / tasks.length;
     
-    // Identify dominant HAS level
     const hasDistribution = [1, 2, 3, 4, 5].map(level => 
       tasks.filter(t => t.humanAgencyScale === level).length
     );
     const dominantHAS = hasDistribution.indexOf(Math.max(...hasDistribution)) + 1;
 
-    return {
+    const analysisResults = {
       taskCategorization: {
         greenLight: greenLightTasks,
         redLight: redLightTasks,
         rndOpportunity: rndOpportunityTasks,
-        lowPriority: tasks.filter(t => t.automationDesire <= 2)
+        lowPriority: redLightTasks
       },
       averages: {
         automationDesire: avgAutomationDesire,
@@ -165,32 +97,13 @@ const DeepDiveInterview: React.FC<DeepDiveInterviewProps> = ({ onComplete, previ
       totalTasks: tasks.length,
       completionRate: 100
     };
-  };
 
-  const handlePrevious = () => {
-    if (currentTaskIndex > 0) {
-      setCurrentTaskIndex(currentTaskIndex - 1);
-      // Restore previous task data if available
-      const prevTask = allTasks[currentTaskIndex - 1];
-      if (taskRatings[prevTask]) {
-        const prevData = taskRatings[prevTask];
-        setCurrentRatings({
-          automationDesire: [prevData.automationDesire],
-          humanAgencyScale: [prevData.humanAgencyScale],
-          timePercentage: [prevData.timePercentage],
-          familiarityLevel: [prevData.familiarityLevel]
-        });
-        setCurrentReasonings({
-          automationReason: prevData.automationReason,
-          hasReason: prevData.hasReason
-        });
-      }
-    }
-  };
-
-  const canProceed = () => {
-    return currentReasonings.automationReason.trim().length > 0 && 
-           currentReasonings.hasReason.trim().length > 0;
+    onComplete({
+      taskRatings: dummyTaskData,
+      analysisResults,
+      interviewCompleted: true,
+      completedAt: new Date().toISOString()
+    });
   };
 
   return (
@@ -198,246 +111,96 @@ const DeepDiveInterview: React.FC<DeepDiveInterviewProps> = ({ onComplete, previ
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Deep Dive & Initial Ratings Interview
+          Deep Dive & Task Assessment Interview
         </h2>
         <p className="text-gray-600">
-          Detailed assessment of tasks with automation desire and human agency ratings
+          Audio-based detailed assessment of tasks with automation preferences
         </p>
         <Badge variant="outline" className="mt-2">
-          Task {currentTaskIndex + 1} of {allTasks.length}
+          AI Interviewer Ready
         </Badge>
       </div>
 
-      {/* Progress */}
-      <div className="flex space-x-2 mb-6">
-        {allTasks.map((_, index) => (
-          <div
-            key={index}
-            className={`h-2 flex-1 rounded ${
-              index < currentTaskIndex ? 'bg-green-600' : 
-              index === currentTaskIndex ? 'bg-blue-600' : 'bg-gray-200'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Current Task Assessment */}
+      {/* Interview Interface */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <Star className="h-6 w-6 text-blue-600" />
-            Task Assessment: {currentTask}
+            AI Audio Task Assessment
           </CardTitle>
           <CardDescription>
-            AI-assisted task evaluation with detailed ratings
+            Conversational assessment of your tasks and AI collaboration preferences
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-8">
-          {/* AI Prompts */}
-          <div className="space-y-4">
-            <Alert>
-              <Volume2 className="h-4 w-4" />
-              <AlertDescription>
-                Let's dive deeper into '{currentTask}'. We want to understand your preferences regarding AI's role.
-              </AlertDescription>
-            </Alert>
+        <CardContent className="space-y-6">
+          {/* AI Interviewer Status */}
+          <Alert>
+            <Mic className="h-4 w-4" />
+            <AlertDescription className="text-base">
+              I'll guide you through a detailed discussion of your key tasks, asking about your automation preferences 
+              and ideal level of human involvement for each one.
+            </AlertDescription>
+          </Alert>
 
-            <Alert>
-              <MessageCircle className="h-4 w-4" />
-              <AlertDescription>
-                If an AI system could do '{currentTask}' completely on its own, how much would you want it to do it for you? 
-                Think about whether it would free up your time, or if it's repetitive.
-              </AlertDescription>
-            </Alert>
+          {/* Interview Topics */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-blue-900 mb-4">Assessment Areas:</h3>
+            <ul className="space-y-2 text-blue-800">
+              <li>• Task identification and validation</li>
+              <li>• Automation desire rating (1-5 scale)</li>
+              <li>• Human Agency Scale assessment</li>
+              <li>• Time allocation and familiarity levels</li>
+              <li>• Reasoning behind preferences</li>
+            </ul>
           </div>
 
-          {/* Task Validation */}
-          <Card className="bg-blue-50 border-blue-200">
-            <CardContent className="pt-4">
-              <h4 className="font-medium text-blue-900 mb-2">Task Validation</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-800">
-                    Do you regularly perform this task?
-                  </label>
-                  <Badge variant="outline" className="bg-white">Yes</Badge>
+          {/* Sample Task Analysis */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              Sample Task Analysis (Demo Data)
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <div className="text-sm">
+                  <span className="font-medium text-green-800">High Automation Desire:</span>
+                  <ul className="ml-4 mt-1 text-green-700">
+                    <li>• Email Management</li>
+                    <li>• Status Reporting</li>
+                  </ul>
                 </div>
-                
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-800">
-                    Familiarity Level
-                  </label>
-                  <div className="space-y-2">
-                    <Slider
-                      value={currentRatings.familiarityLevel}
-                      onValueChange={(value) => setCurrentRatings(prev => ({ ...prev, familiarityLevel: value }))}
-                      max={2}
-                      min={0}
-                      step={1}
-                      className="w-full"
-                    />
-                    <div className="text-sm text-blue-700">
-                      {familiarityLabels[currentRatings.familiarityLevel[0]]}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-800">
-                    Time Percentage (% of work time)
-                  </label>
-                  <div className="space-y-2">
-                    <Slider
-                      value={currentRatings.timePercentage}
-                      onValueChange={(value) => setCurrentRatings(prev => ({ ...prev, timePercentage: value }))}
-                      max={100}
-                      min={5}
-                      step={5}
-                      className="w-full"
-                    />
-                    <div className="text-sm text-blue-700">
-                      {currentRatings.timePercentage[0]}%
-                    </div>
-                  </div>
+                <div className="text-sm">
+                  <span className="font-medium text-red-800">Low Automation Desire:</span>
+                  <ul className="ml-4 mt-1 text-red-700">
+                    <li>• Team Mentoring</li>
+                    <li>• Project Planning</li>
+                  </ul>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          <Separator />
-
-          {/* Automation Desire Rating */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Automation Desire Assessment</h3>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  How much would you want AI to handle '{currentTask}'?
-                </label>
-                <Slider
-                  value={currentRatings.automationDesire}
-                  onValueChange={(value) => setCurrentRatings(prev => ({ ...prev, automationDesire: value }))}
-                  max={4}
-                  min={0}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-gray-600">
-                  {automationDesireLabels.map((label, index) => (
-                    <span key={index} className={index === currentRatings.automationDesire[0] ? 'font-bold text-blue-600' : ''}>
-                      {label}
-                    </span>
-                  ))}
+              <div className="space-y-3">
+                <div className="text-sm">
+                  <span className="font-medium text-blue-800">R&D Opportunities:</span>
+                  <ul className="ml-4 mt-1 text-blue-700">
+                    <li>• Data Analysis (collaborative)</li>
+                  </ul>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  Why do you feel this way about AI handling this task?
-                </label>
-                <Textarea
-                  value={currentReasonings.automationReason}
-                  onChange={(e) => setCurrentReasonings(prev => ({ ...prev, automationReason: e.target.value }))}
-                  placeholder="Explain your reasoning... (e.g., it's repetitive, frees up time for higher-value work, improves quality, etc.)"
-                  rows={3}
-                />
+                <div className="text-sm">
+                  <span className="font-medium text-gray-800">Average Ratings:</span>
+                  <ul className="ml-4 mt-1 text-gray-700">
+                    <li>• Automation Desire: 2.6/5</li>
+                    <li>• Human Agency: 2.8/5</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-
-          <Separator />
-
-          {/* Human Agency Scale (HAS) Rating */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Human Agency Scale Assessment</h3>
-            
-            <Alert>
-              <MessageCircle className="h-4 w-4" />
-              <AlertDescription>
-                Now, let's think about if an AI system were to assist you with '{currentTask}'. 
-                How much collaboration between you and the AI would be needed for it to be completed effectively?
-              </AlertDescription>
-            </Alert>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  Ideal level of human involvement:
-                </label>
-                <Slider
-                  value={currentRatings.humanAgencyScale}
-                  onValueChange={(value) => setCurrentRatings(prev => ({ ...prev, humanAgencyScale: value }))}
-                  max={4}
-                  min={0}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-xs text-gray-600">
-                  {hasLabels.map((label, index) => (
-                    <span key={index} className={`text-center ${index === currentRatings.humanAgencyScale[0] ? 'font-bold text-blue-600' : ''}`}>
-                      {label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  What makes this level of human involvement ideal?
-                </label>
-                <Textarea
-                  value={currentReasonings.hasReason}
-                  onChange={(e) => setCurrentReasonings(prev => ({ ...prev, hasReason: e.target.value }))}
-                  placeholder="Explain why this level is necessary... (e.g., crucial decisions, specialized knowledge, interpersonal communication, etc.)"
-                  rows={3}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Completed Tasks Summary */}
-          {Object.keys(taskRatings).length > 0 && (
-            <div className="border-t pt-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                Completed Tasks ({Object.keys(taskRatings).length})
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {Object.values(taskRatings).map((task, index) => (
-                  <div key={index} className="text-xs bg-green-50 p-2 rounded border border-green-200">
-                    <div className="font-medium text-green-800">{task.task}</div>
-                    <div className="text-green-700">
-                      Automation: {automationDesireLabels[task.automationDesire]} | 
-                      HAS: H{task.humanAgencyScale + 1}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      {/* Navigation */}
-      <div className="flex justify-between items-center">
-        <Button 
-          variant="outline" 
-          onClick={handlePrevious}
-          disabled={currentTaskIndex === 0}
-        >
-          Previous Task
-        </Button>
-        
-        <div className="text-sm text-gray-600">
-          Task {currentTaskIndex + 1} of {allTasks.length}
-        </div>
-        
-        <Button 
-          onClick={handleTaskComplete}
-          disabled={!canProceed()}
-        >
-          {currentTaskIndex === allTasks.length - 1 ? 'Complete Assessment' : 'Next Task'}
+      {/* Complete Button */}
+      <div className="flex justify-center">
+        <Button onClick={handleComplete} size="lg" className="px-8">
+          Complete Task Assessment
         </Button>
       </div>
     </div>

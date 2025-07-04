@@ -154,7 +154,7 @@ const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, org
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="font-medium text-blue-900 mb-2">What to Expect:</h4>
             <ul className="space-y-1 text-sm text-blue-800">
-              <li>• 4 short, conversational interviews over the coming weeks</li>
+              <li>• 4 short, conversational interviews in the next steps</li>
               <li>• Each interview builds on the previous one</li>
               <li>• AI-powered conversational interface - speak naturally</li>
               <li>• Approximately 15-20 minutes per session</li>

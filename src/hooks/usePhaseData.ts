@@ -8,20 +8,20 @@ export const usePhaseData = () => {
   const [employeeData, setEmployeeData] = useState<Record<string, InterviewPhaseData>>({});
   const [interviewProgress, setInterviewProgress] = useState<Record<number, string>>({});
 
-  const handlePhaseComplete = (phaseId: number, data: any) => {
-    console.log(`Phase ${phaseId} completed with data:`, data);
+  const handlePhaseComplete = (data: any) => {
+    console.log(`Phase ${currentPhase} completed with data:`, data);
     
-    if (phaseId === 0) {
+    if (currentPhase === 0) {
       setOrganizationData(data);
     } else {
-      setEmployeeData(prev => ({ ...prev, [`phase_${phaseId}`]: data }));
+      setEmployeeData(prev => ({ ...prev, [`phase_${currentPhase}`]: data }));
     }
     
-    setInterviewProgress(prev => ({ ...prev, [phaseId]: 'completed' }));
+    setInterviewProgress(prev => ({ ...prev, [currentPhase]: 'completed' }));
     
     // Auto-advance to next phase
-    if (phaseId < 6) { // 6 is the last phase index
-      setCurrentPhase(phaseId + 1);
+    if (currentPhase < 6) { // 6 is the last phase index
+      setCurrentPhase(currentPhase + 1);
     }
   };
 

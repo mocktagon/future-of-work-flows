@@ -36,9 +36,9 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
   if (!CurrentComponent) return null;
 
   const baseProps = {
-    onComplete,
     organizationData,
-    employeeData
+    employeeData,
+    onComplete
   };
 
   // Components that don't need previousPhaseData at all

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import DeepDiveInterview from '@/components/interview/DeepDiveInterview';
 import RefinementInterview from '@/components/interview/RefinementInterview';
 import ValidationInterview from '@/components/interview/ValidationInterview';
 import ReportsDashboard from '@/components/reports/ReportsDashboard';
-import { Building, Users, MessageSquare, Brain, BarChart3, CheckCircle, Clock, Play } from 'lucide-react';
+import { Building, Users, MessageSquare, Brain, BarChart3, CheckCircle, Clock, Play, User, Bot } from 'lucide-react';
 import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
 const Index = () => {
@@ -35,7 +34,7 @@ const Index = () => {
       id: 1,
       title: "Team Onboarding",
       description: "Consent and process introduction",
-      icon: Users,
+      icon: User,
       status: "pending",
       component: EmployeeOnboarding,
       humanInput: true
@@ -44,7 +43,7 @@ const Index = () => {
       id: 2,
       title: "Initial Exploration",
       description: "Conversational mini-interview and task discovery",
-      icon: MessageSquare,
+      icon: User,
       status: "pending",
       component: InitialInterview,
       humanInput: true
@@ -53,7 +52,7 @@ const Index = () => {
       id: 3,
       title: "Deep Dive Assessment",
       description: "Task identification and HAS/automation rating",
-      icon: Brain,
+      icon: User,
       status: "pending",
       component: DeepDiveInterview,
       humanInput: true
@@ -62,7 +61,7 @@ const Index = () => {
       id: 4,
       title: "Refinement & Scenarios",
       description: "Report review and scenario exploration",
-      icon: MessageSquare,
+      icon: User,
       status: "pending",
       component: RefinementInterview,
       humanInput: true
@@ -71,7 +70,7 @@ const Index = () => {
       id: 5,
       title: "Validation & Planning",
       description: "Final validation and action planning",
-      icon: CheckCircle,
+      icon: User,
       status: "pending",
       component: ValidationInterview,
       humanInput: true
@@ -80,7 +79,7 @@ const Index = () => {
       id: 6,
       title: "Reports & Analysis",
       description: "Multi-level reporting and insights",
-      icon: BarChart3,
+      icon: Bot,
       status: "pending",
       component: ReportsDashboard,
       humanInput: false
@@ -130,6 +129,29 @@ const Index = () => {
 
   // Convert employeeData to array for phases that expect previousPhaseData array
   const previousPhaseDataArray = Object.values(employeeData);
+
+  const renderCurrentComponent = () => {
+    if (!CurrentComponent) return null;
+
+    const baseProps = {
+      onComplete: (data: any) => handlePhaseComplete(currentPhase, data),
+      organizationData,
+      employeeData
+    };
+
+    // Phase 0 (OrganizationSetup) and Phase 1 (EmployeeOnboarding) don't need previousPhaseData
+    if (currentPhase === 0 || currentPhase === 1) {
+      return <CurrentComponent {...baseProps} />;
+    }
+
+    // Phase 5 (ValidationInterview) expects array of previous phase data
+    if (currentPhase === 5) {
+      return <CurrentComponent {...baseProps} previousPhaseData={previousPhaseDataArray} />;
+    }
+
+    // Other phases expect single previous phase data
+    return <CurrentComponent {...baseProps} previousPhaseData={employeeData[`phase_${currentPhase - 1}`]} />;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -235,24 +257,7 @@ const Index = () => {
             </div>
           </CardHeader>
           <CardContent className="p-6">
-            {CurrentComponent && (
-              <>
-                {currentPhase === 1 ? (
-                  <CurrentComponent
-                    onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
-                    organizationData={organizationData}
-                    employeeData={employeeData}
-                  />
-                ) : (
-                  <CurrentComponent
-                    onComplete={(data: any) => handlePhaseComplete(currentPhase, data)}
-                    organizationData={organizationData}
-                    employeeData={employeeData}
-                    previousPhaseData={currentPhase === 5 ? previousPhaseDataArray : employeeData[`phase_${currentPhase - 1}`]}
-                  />
-                )}
-              </>
-            )}
+            {renderCurrentComponent()}
           </CardContent>
         </Card>
 

@@ -22,81 +22,60 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
   organizationData, 
   employeeData 
 }) => {
-  const phases = [
-    OrganizationSetup,
-    EmployeeOnboarding,
-    InitialInterview,
-    DeepDiveInterview,
-    RefinementInterview,
-    ValidationInterview,
-    ReportsDashboard
-  ];
-
-  const CurrentComponent = phases[currentPhase];
-  
-  if (!CurrentComponent) return null;
-
   // Phase 0 (OrganizationSetup) - only needs onComplete
   if (currentPhase === 0) {
-    return <CurrentComponent onComplete={onComplete} />;
+    return <OrganizationSetup onComplete={onComplete} />;
   }
 
-  // Phase 1 (EmployeeOnboarding) - needs organizationData, employeeData, and onComplete
+  // Phase 1 (EmployeeOnboarding) - only needs onComplete
   if (currentPhase === 1) {
-    return <CurrentComponent 
+    return <EmployeeOnboarding onComplete={onComplete} />;
+  }
+
+  // Phase 2 (InitialInterview) - needs onComplete, organizationData, and previousPhaseData
+  if (currentPhase === 2) {
+    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
+    return <InitialInterview 
+      onComplete={onComplete}
       organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete} 
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+
+  // Phase 3 (DeepDiveInterview) - needs onComplete and previousPhaseData
+  if (currentPhase === 3) {
+    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
+    return <DeepDiveInterview 
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+
+  // Phase 4 (RefinementInterview) - needs onComplete and previousPhaseData
+  if (currentPhase === 4) {
+    const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
+    return <RefinementInterview 
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+
+  // Phase 5 (ValidationInterview) - needs onComplete, organizationData, and previousPhaseData array
+  if (currentPhase === 5) {
+    const previousPhaseDataArray = Object.values(employeeData);
+    return <ValidationInterview 
+      onComplete={onComplete}
+      organizationData={organizationData}
+      previousPhaseData={previousPhaseDataArray} 
     />;
   }
 
   // Phase 6 (ReportsDashboard) - needs organizationData, employeeData, and onComplete
   if (currentPhase === 6) {
-    return <CurrentComponent 
+    return <ReportsDashboard 
       organizationData={organizationData}
       employeeData={employeeData}
       onComplete={onComplete} 
-    />;
-  }
-
-  // Phase 5 (ValidationInterview) - needs all props including previousPhaseData array
-  if (currentPhase === 5) {
-    const previousPhaseDataArray = Object.values(employeeData);
-    return <ValidationInterview 
-      organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseDataArray} 
-    />;
-  }
-
-  // Phases 2, 3, 4 (Interview phases) - need all props including single previousPhaseData
-  const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-  
-  if (currentPhase === 2) {
-    return <InitialInterview 
-      organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseData} 
-    />;
-  }
-  
-  if (currentPhase === 3) {
-    return <DeepDiveInterview 
-      organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseData} 
-    />;
-  }
-  
-  if (currentPhase === 4) {
-    return <RefinementInterview 
-      organizationData={organizationData}
-      employeeData={employeeData}
-      onComplete={onComplete}
-      previousPhaseData={previousPhaseData} 
     />;
   }
 

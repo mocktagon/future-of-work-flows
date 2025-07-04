@@ -1,4 +1,3 @@
-
 import React from 'react';
 import OrganizationSetup from '@/components/interview/OrganizationSetup';
 import EmployeeOnboarding from '@/components/interview/EmployeeOnboarding';
@@ -36,36 +35,44 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
   
   if (!CurrentComponent) return null;
 
-  const baseProps = {
-    organizationData,
-    employeeData,
-    onComplete
-  };
-
   // Phase 0 (OrganizationSetup) - only needs onComplete
   if (currentPhase === 0) {
     return <CurrentComponent onComplete={onComplete} />;
   }
 
-  // Phase 1 (EmployeeOnboarding) - needs base props but no previousPhaseData
+  // Phase 1 (EmployeeOnboarding) - only needs onComplete
   if (currentPhase === 1) {
-    return <CurrentComponent {...baseProps} />;
+    return <CurrentComponent onComplete={onComplete} />;
   }
 
-  // Phase 6 (ReportsDashboard) - needs base props but no previousPhaseData
+  // Phase 6 (ReportsDashboard) - needs organizationData, employeeData, and onComplete
   if (currentPhase === 6) {
-    return <CurrentComponent {...baseProps} />;
+    return <CurrentComponent 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete} 
+    />;
   }
 
   // Phase 5 (ValidationInterview) - expects array of previous phase data
   if (currentPhase === 5) {
     const previousPhaseDataArray = Object.values(employeeData);
-    return <CurrentComponent {...baseProps} previousPhaseData={previousPhaseDataArray} />;
+    return <CurrentComponent 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseDataArray} 
+    />;
   }
 
   // Other phases (2, 3, 4) expect single previous phase data
   const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-  return <CurrentComponent {...baseProps} previousPhaseData={previousPhaseData} />;
+  return <CurrentComponent 
+    organizationData={organizationData}
+    employeeData={employeeData}
+    onComplete={onComplete}
+    previousPhaseData={previousPhaseData} 
+  />;
 };
 
 export default PhaseRenderer;

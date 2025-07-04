@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -140,18 +139,8 @@ const Index = () => {
       employeeData
     };
 
-    // Phase 0 (OrganizationSetup) - no previousPhaseData needed
-    if (currentPhase === 0) {
-      return <CurrentComponent {...baseProps} />;
-    }
-
-    // Phase 1 (EmployeeOnboarding) - no previousPhaseData needed
-    if (currentPhase === 1) {
-      return <CurrentComponent {...baseProps} />;
-    }
-
-    // Phase 6 (ReportsDashboard) - no previousPhaseData needed
-    if (currentPhase === 6) {
+    // Components that don't need previousPhaseData at all
+    if (currentPhase === 0 || currentPhase === 1 || currentPhase === 6) {
       return <CurrentComponent {...baseProps} />;
     }
 

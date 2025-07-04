@@ -1,3 +1,4 @@
+
 import React from 'react';
 import OrganizationSetup from '@/components/interview/OrganizationSetup';
 import EmployeeOnboarding from '@/components/interview/EmployeeOnboarding';
@@ -40,9 +41,13 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     return <CurrentComponent onComplete={onComplete} />;
   }
 
-  // Phase 1 (EmployeeOnboarding) - only needs onComplete
+  // Phase 1 (EmployeeOnboarding) - needs organizationData, employeeData, and onComplete
   if (currentPhase === 1) {
-    return <CurrentComponent onComplete={onComplete} />;
+    return <CurrentComponent 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete} 
+    />;
   }
 
   // Phase 6 (ReportsDashboard) - needs organizationData, employeeData, and onComplete
@@ -54,10 +59,10 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     />;
   }
 
-  // Phase 5 (ValidationInterview) - expects array of previous phase data
+  // Phase 5 (ValidationInterview) - needs all props including previousPhaseData array
   if (currentPhase === 5) {
     const previousPhaseDataArray = Object.values(employeeData);
-    return <CurrentComponent 
+    return <ValidationInterview 
       organizationData={organizationData}
       employeeData={employeeData}
       onComplete={onComplete}
@@ -65,14 +70,37 @@ const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     />;
   }
 
-  // Other phases (2, 3, 4) expect single previous phase data
+  // Phases 2, 3, 4 (Interview phases) - need all props including single previousPhaseData
   const previousPhaseData = employeeData[`phase_${currentPhase - 1}`];
-  return <CurrentComponent 
-    organizationData={organizationData}
-    employeeData={employeeData}
-    onComplete={onComplete}
-    previousPhaseData={previousPhaseData} 
-  />;
+  
+  if (currentPhase === 2) {
+    return <InitialInterview 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+  
+  if (currentPhase === 3) {
+    return <DeepDiveInterview 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+  
+  if (currentPhase === 4) {
+    return <RefinementInterview 
+      organizationData={organizationData}
+      employeeData={employeeData}
+      onComplete={onComplete}
+      previousPhaseData={previousPhaseData} 
+    />;
+  }
+
+  return null;
 };
 
 export default PhaseRenderer;

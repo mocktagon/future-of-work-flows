@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,21 +5,30 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { CheckCircle, User, Users, Building, TrendingUp, Target, AlertTriangle, Lightbulb, Download, Share } from 'lucide-react';
+import { CheckCircle, User, Users, Building, TrendingUp, Target, AlertTriangle, Lightbulb, Download, Share, ArrowRight, Clock } from 'lucide-react';
 import IndividualReport from './IndividualReport';
 import DepartmentReport from './DepartmentReport';
 import OrganizationReport from './OrganizationReport';
 
 const ReportsDashboard = ({ organizationData, employeeData }) => {
-  const [activeTab, setActiveTab] = useState('individual');
+  const [activeTab, setActiveTab] = useState('summary');
 
   // Generate summary data from all phases
   const generateReportData = () => {
     // In a real implementation, this would aggregate data from all employees
     // For demo purposes, we'll simulate comprehensive data
     
+    const mockSummaryData = {
+      overallReadinessScore: 7.2,
+      totalTasksAnalyzed: 45,
+      automationOpportunities: 12,
+      teamReadinessLevel: 'High',
+      priorityActions: 5,
+      estimatedEfficiencyGain: '35%'
+    };
+
     const mockIndividualData = {
-      employeeName: employeeData?.phase_1?.employeeName || 'John Doe',
+      employeeName: employeeData?.phase_1?.employeeName || 'Team Member',
       department: 'Product Development',
       role: 'Senior Analyst',
       tasksAssessed: 8,
@@ -81,6 +89,7 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
     };
 
     return {
+      summary: mockSummaryData,
       individual: mockIndividualData,
       department: mockDepartmentData,
       organization: mockOrganizationData
@@ -91,14 +100,20 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
 
   const reportTabs = [
     {
+      id: 'summary',
+      label: 'Executive Summary',
+      icon: Target,
+      description: 'Key findings and recommended actions'
+    },
+    {
       id: 'individual',
-      label: 'Individual Report',
+      label: 'Individual Insights',
       icon: User,
       description: 'Personal AI readiness profile and insights'
     },
     {
       id: 'department',
-      label: 'Department Report',
+      label: 'Team Analysis',
       icon: Users,
       description: 'Team-level AI readiness analysis'
     },
@@ -120,57 +135,101 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
     // In a real implementation, this would open sharing options
   };
 
+  const nextSteps = [
+    {
+      phase: 'Immediate (Week 1-2)',
+      color: 'bg-red-50 border-red-200 text-red-800',
+      badgeColor: 'bg-red-100 text-red-700',
+      actions: [
+        'Set up pilot program with email automation',
+        'Form AI implementation team',
+        'Communicate assessment results to stakeholders'
+      ]
+    },
+    {
+      phase: 'Short-term (Month 1-3)',
+      color: 'bg-orange-50 border-orange-200 text-orange-800',
+      badgeColor: 'bg-orange-100 text-orange-700',
+      actions: [
+        'Launch training program on AI collaboration',
+        'Implement first automation solutions',
+        'Establish success metrics and monitoring'
+      ]
+    },
+    {
+      phase: 'Medium-term (Month 3-6)',
+      color: 'bg-blue-50 border-blue-200 text-blue-800',
+      badgeColor: 'bg-blue-100 text-blue-700',
+      actions: [
+        'Scale successful pilots to broader teams',
+        'Develop advanced AI integration strategies',
+        'Create feedback loops for continuous improvement'
+      ]
+    }
+  ];
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          AI Readiness Assessment Reports
+          AI Readiness Assessment Results
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Multi-level reporting and analysis providing actionable insights for AI integration 
-          and workforce development across individual, departmental, and organizational levels.
+          Your comprehensive AI readiness analysis with actionable insights and implementation roadmap
         </p>
       </div>
 
-      {/* Summary Statistics */}
+      {/* Key Metrics Overview */}
       <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-blue-900">
             <TrendingUp className="h-6 w-6" />
-            Assessment Overview
+            Key Findings at a Glance
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-700 mb-1">
-                {reportData.organization.participationRate}%
+              <div className="text-2xl font-bold text-blue-700 mb-1">
+                {reportData.summary.overallReadinessScore}/10
               </div>
-              <div className="text-sm text-blue-600">Participation Rate</div>
-              <Progress value={reportData.organization.participationRate} className="mt-2 h-2" />
+              <div className="text-xs text-blue-600">Readiness Score</div>
             </div>
             
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-700 mb-1">
-                {reportData.organization.overallReadinessScore}/10
+              <div className="text-2xl font-bold text-blue-700 mb-1">
+                {reportData.summary.totalTasksAnalyzed}
               </div>
-              <div className="text-sm text-blue-600">Overall Readiness Score</div>
-              <Progress value={reportData.organization.overallReadinessScore * 10} className="mt-2 h-2" />
+              <div className="text-xs text-blue-600">Tasks Analyzed</div>
             </div>
             
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-700 mb-1">
-                {reportData.organization.departmentsAssessed}
+              <div className="text-2xl font-bold text-green-700 mb-1">
+                {reportData.summary.automationOpportunities}
               </div>
-              <div className="text-sm text-blue-600">Departments Assessed</div>
+              <div className="text-xs text-green-600">Quick Wins</div>
             </div>
             
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-700 mb-1">
-                {reportData.individual.tasksAssessed * 50}+
+              <div className="text-2xl font-bold text-purple-700 mb-1">
+                {reportData.summary.estimatedEfficiencyGain}
               </div>
-              <div className="text-sm text-blue-600">Total Tasks Analyzed</div>
+              <div className="text-xs text-purple-600">Efficiency Gain</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-700 mb-1">
+                {reportData.summary.priorityActions}
+              </div>
+              <div className="text-xs text-orange-600">Priority Actions</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-2xl font-bold text-indigo-700 mb-1">
+                {reportData.summary.teamReadinessLevel}
+              </div>
+              <div className="text-xs text-indigo-600">Team Readiness</div>
             </div>
           </div>
         </CardContent>
@@ -179,13 +238,13 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
       {/* Main Reports Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <div className="flex items-center justify-between">
-          <TabsList className="grid w-full max-w-2xl grid-cols-3">
+          <TabsList className="grid w-full max-w-3xl grid-cols-4">
             {reportTabs.map((tab) => {
               const IconComponent = tab.icon;
               return (
-                <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-2">
+                <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-2 text-xs">
                   <IconComponent className="h-4 w-4" />
-                  {tab.label}
+                  <span className="hidden sm:inline">{tab.label}</span>
                 </TabsTrigger>
               );
             })}
@@ -214,7 +273,90 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
           </div>
         </div>
 
-        {/* Tab Content */}
+        {/* Executive Summary Tab */}
+        <TabsContent value="summary" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-5 w-5 text-blue-600" />
+                Implementation Roadmap
+              </CardTitle>
+              <CardDescription>
+                Your step-by-step plan for AI integration success
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {nextSteps.map((step, index) => (
+                  <div key={index} className={`p-4 rounded-lg border ${step.color}`}>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-semibold">{step.phase}</h3>
+                      <Badge className={step.badgeColor}>
+                        {step.actions.length} Actions
+                      </Badge>
+                    </div>
+                    <div className="space-y-2">
+                      {step.actions.map((action, actionIndex) => (
+                        <div key={actionIndex} className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-current opacity-60" />
+                          <span className="text-sm">{action}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Wins */}
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-green-900">
+                <CheckCircle className="h-5 w-5" />
+                Quick Wins - Start Here
+              </CardTitle>
+              <CardDescription className="text-green-700">
+                High-impact, low-effort opportunities to begin your AI journey
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <h4 className="font-medium text-green-900">Ready for Automation</h4>
+                  <div className="space-y-2">
+                    {['Email Management', 'Report Generation', 'Data Entry', 'Scheduling'].map((task, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-white rounded border border-green-200">
+                        <span className="text-sm text-green-800">{task}</span>
+                        <Badge className="bg-green-100 text-green-700">Ready</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <h4 className="font-medium text-green-900">Expected Benefits</h4>
+                  <div className="space-y-2 text-sm text-green-800">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span>Save 8-12 hours per week per team member</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>Reduce errors by 60-80%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>Improve job satisfaction scores</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Other Tab Content */}
         <TabsContent value="individual" className="space-y-4">
           <IndividualReport 
             employeeData={employeeData} 
@@ -231,60 +373,31 @@ const ReportsDashboard = ({ organizationData, employeeData }) => {
         </TabsContent>
       </Tabs>
 
-      {/* Action Items Summary */}
-      <Card className="bg-green-50 border-green-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-green-900">
-            <Target className="h-6 w-6" />
-            Next Steps & Action Items
-          </CardTitle>
-          <CardDescription className="text-green-700">
-            Recommended immediate actions based on assessment findings
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <h4 className="font-semibold text-green-900 flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                Immediate Priorities (0-3 months)
-              </h4>
-              <ul className="space-y-2 text-sm text-green-800">
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">1</Badge>
-                  Launch pilot program with email management automation
-                </li>
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">2</Badge>
-                  Develop AI literacy training program
-                </li>
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">3</Badge>
-                  Establish AI governance committee
-                </li>
-              </ul>
-            </div>
-            
-            <div className="space-y-3">
-              <h4 className="font-semibold text-green-900 flex items-center gap-2">
-                <Lightbulb className="h-5 w-5" />
-                Medium-term Goals (3-12 months)
-              </h4>
-              <ul className="space-y-2 text-sm text-green-800">
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">1</Badge>
-                  Scale successful automation pilots
-                </li>
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">2</Badge>
-                  Implement skill development programs
-                </li>
-                <li className="flex items-start gap-2">
-                  <Badge variant="outline" className="mt-0.5 bg-white">3</Badge>
-                  Deploy advanced AI collaboration tools
-                </li>
-              </ul>
-            </div>
+      {/* Call to Action */}
+      <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <CardContent className="p-8 text-center">
+          <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+            Your AI readiness assessment is complete. Take the first step towards transformation 
+            by implementing your quick wins and building momentum for larger changes.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              size="lg" 
+              variant="secondary"
+              className="bg-white text-blue-600 hover:bg-gray-100"
+            >
+              Download Full Report
+              <Download className="ml-2 h-5 w-5" />
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600"
+            >
+              Schedule Implementation Call
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </CardContent>
       </Card>

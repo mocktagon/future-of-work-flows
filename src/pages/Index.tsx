@@ -12,7 +12,7 @@ import DeepDiveInterview from '@/components/interview/DeepDiveInterview';
 import RefinementInterview from '@/components/interview/RefinementInterview';
 import ValidationInterview from '@/components/interview/ValidationInterview';
 import ReportsDashboard from '@/components/reports/ReportsDashboard';
-import { Circle, Square, Triangle, Star, Hexagon, CheckCircle, Clock, Play } from 'lucide-react';
+import { Building, Users, MessageSquare, Brain, BarChart3, CheckCircle, Clock, Play } from 'lucide-react';
 import { OrganizationData, InterviewPhaseData } from '@/types/interview';
 
 const Index = () => {
@@ -26,41 +26,46 @@ const Index = () => {
       id: 0,
       title: "Organization Setup",
       description: "Define organization scope and parameters",
-      icon: Circle,
+      icon: Building,
       status: "active",
-      component: OrganizationSetup
+      component: OrganizationSetup,
+      humanInput: false
     },
     {
       id: 1,
-      title: "Employee Onboarding",
+      title: "Team Onboarding",
       description: "Consent and process introduction",
-      icon: Square,
+      icon: Users,
       status: "pending",
-      component: EmployeeOnboarding
+      component: EmployeeOnboarding,
+      humanInput: true
     },
     {
       id: 2,
       title: "Initial Exploration",
       description: "Conversational mini-interview and task discovery",
-      icon: Triangle,
+      icon: MessageSquare,
       status: "pending",
-      component: InitialInterview
+      component: InitialInterview,
+      humanInput: true
     },
     {
       id: 3,
       title: "Deep Dive Assessment",
       description: "Task identification and HAS/automation rating",
-      icon: Star,
+      icon: Brain,
       status: "pending",
-      component: DeepDiveInterview
+      component: DeepDiveInterview,
+      humanInput: true
     },
     {
       id: 4,
       title: "Refinement & Scenarios",
       description: "Report review and scenario exploration",
-      icon: Hexagon,
+      icon: MessageSquare,
       status: "pending",
-      component: RefinementInterview
+      component: RefinementInterview,
+      humanInput: true
     },
     {
       id: 5,
@@ -68,15 +73,17 @@ const Index = () => {
       description: "Final validation and action planning",
       icon: CheckCircle,
       status: "pending",
-      component: ValidationInterview
+      component: ValidationInterview,
+      humanInput: true
     },
     {
       id: 6,
       title: "Reports & Analysis",
       description: "Multi-level reporting and insights",
-      icon: CheckCircle,
+      icon: BarChart3,
       status: "pending",
-      component: ReportsDashboard
+      component: ReportsDashboard,
+      humanInput: false
     }
   ];
 
@@ -141,7 +148,7 @@ const Index = () => {
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Circle className="h-6 w-6 text-blue-600" />
+              <Building className="h-6 w-6 text-blue-600" />
               Process Overview
             </CardTitle>
             <CardDescription>
@@ -174,11 +181,15 @@ const Index = () => {
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0 relative">
                           <IconComponent className={`h-6 w-6 ${
                             status === 'completed' ? 'text-green-600' : 
                             status === 'active' ? 'text-blue-600' : 'text-gray-400'
                           }`} />
+                          {phase.humanInput && (
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full border-2 border-white" 
+                                 title="Requires human input" />
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -190,9 +201,16 @@ const Index = () => {
                           <p className="text-xs text-gray-600 mb-2">
                             {phase.description}
                           </p>
-                          <Badge className={`text-xs ${getStatusColor(status)}`}>
-                            {status.charAt(0).toUpperCase() + status.slice(1)}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className={`text-xs ${getStatusColor(status)}`}>
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </Badge>
+                            {phase.humanInput && (
+                              <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-300">
+                                Human Input
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </CardContent>

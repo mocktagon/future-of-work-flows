@@ -12,7 +12,7 @@ const Landing = () => {
   const stats = [
     { number: "87%", label: "of companies struggle with AI adoption", color: "text-red-600" },
     { number: "3.2x", label: "faster implementation with proper assessment", color: "text-green-600" },
-    { number: "15min", label: "average assessment time per team member", color: "text-blue-600" },
+    { number: "60min", label: "comprehensive assessment time per team", color: "text-blue-600" },
     { number: "92%", label: "accuracy in identifying automation opportunities", color: "text-purple-600" }
   ];
 
@@ -51,8 +51,8 @@ const Landing = () => {
     },
     {
       icon: Zap,
-      title: "Instant Insights",
-      description: "Get actionable recommendations within 30 minutes, not months of consultation"
+      title: "Comprehensive Insights",
+      description: "Get actionable recommendations within 60 minutes, not months of consultation"
     },
     {
       icon: Shield,
@@ -63,7 +63,7 @@ const Landing = () => {
 
   const testimonials = [
     {
-      quote: "Transformed our approach to AI adoption. We identified 12 automation opportunities in just 30 minutes.",
+      quote: "Transformed our approach to AI adoption. We identified 12 automation opportunities in just one hour.",
       author: "Sarah Chen",
       role: "Chief Technology Officer",
       company: "TechCorp"
@@ -78,6 +78,37 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      {/* Navigation */}
+      <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Brain className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-gray-900">AI Readiness</span>
+            </div>
+            <div className="hidden md:flex items-center gap-8">
+              <button 
+                onClick={() => navigate('/science')}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Science
+              </button>
+              <button 
+                onClick={() => navigate('/resources')}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Resources
+              </button>
+              <Button onClick={() => navigate('/assessment')}>
+                Start Assessment
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
@@ -97,7 +128,7 @@ const Landing = () => {
             
             <p className="text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto">
               While your competitors gain 40% efficiency through AI, discover exactly where and how 
-              to implement AI in your organization—in just 30 minutes.
+              to implement AI in your organization—in just 60 minutes.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -204,19 +235,19 @@ const Landing = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              4-Step Process to AI Excellence
+              Multi-Phase Process to AI Excellence
             </h2>
             <p className="text-xl text-gray-600">
-              From setup to actionable insights in under 30 minutes
+              From setup to actionable insights in approximately 60 minutes
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {[
               { step: 1, title: "Setup", time: "5 min", desc: "Define scope" },
-              { step: 2, title: "Onboard", time: "3 min", desc: "Team introduction" },
-              { step: 3, title: "Interview", time: "15 min", desc: "AI-powered assessment" },
-              { step: 4, title: "Results", time: "Instant", desc: "Actionable roadmap" }
+              { step: 2, title: "Onboard", time: "10 min", desc: "Team introduction" },
+              { step: 3, title: "Interview", time: "35 min", desc: "AI-powered assessment" },
+              { step: 4, title: "Results", time: "10 min", desc: "Actionable roadmap" }
             ].map((item, index) => (
               <Card key={index} className="relative text-center p-6 hover:shadow-lg transition-shadow duration-300">
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -298,7 +329,7 @@ const Landing = () => {
               </Button>
             </div>
             <p className="text-blue-200 text-sm mt-4">
-              No signup required • Complete assessment in 30 minutes • Instant results
+              No signup required • Complete assessment in 60 minutes • Instant results
             </p>
           </div>
         </div>

@@ -3,8 +3,8 @@ import React from 'react';
 import OrganizationSetup from './OrganizationSetup';
 import EmployeeOnboarding from './EmployeeOnboarding';
 import EmployeeUpload from './EmployeeUpload';
-import ValidationInterview from './ValidationInterview';
 import InitialInterview from './InitialInterview';
+import ValidationInterview from './ValidationInterview';
 import DeepDiveInterview from './DeepDiveInterview';
 import RefinementInterview from './RefinementInterview';
 import { OrganizationData, InterviewPhaseData } from '@/types/interview';
@@ -36,25 +36,16 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
       return (
         <EmployeeOnboarding 
           onComplete={onComplete}
+          organizationData={organizationData}
         />
       );
     
     case 2:
-      // EmployeeUpload expects different props based on its interface
-      const handleEmployeeListChange = (employees: any[]) => {
-        console.log('Employee list changed:', employees);
-      };
-      
-      const handleSelectedEmployeeChange = (employee: string) => {
-        console.log('Selected employee changed:', employee);
-      };
-      
       return (
-        <EmployeeUpload 
-          employeeList={[]}
-          selectedEmployee=""
-          onEmployeeListChange={handleEmployeeListChange}
-          onSelectedEmployeeChange={handleSelectedEmployeeChange}
+        <InitialInterview 
+          onComplete={onComplete}
+          organizationData={organizationData}
+          previousPhaseData={previousPhaseData[0]}
         />
       );
     
@@ -69,22 +60,13 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
     
     case 4:
       return (
-        <InitialInterview 
-          onComplete={onComplete}
-          organizationData={organizationData}
-          previousPhaseData={previousPhaseData[0]}
-        />
-      );
-    
-    case 5:
-      return (
         <DeepDiveInterview 
           onComplete={onComplete}
           previousPhaseData={previousPhaseData[0]}
         />
       );
     
-    case 6:
+    case 5:
       return (
         <RefinementInterview 
           onComplete={onComplete}

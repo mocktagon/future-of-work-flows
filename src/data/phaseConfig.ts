@@ -1,5 +1,5 @@
 
-import { Building, Users, MessageSquare, Brain, BarChart3, CheckCircle, Clock, Play, User, Bot } from 'lucide-react';
+import { Building, Users, MessageSquare, Brain, BarChart3, CheckCircle, Clock, Play, User, Bot, Upload } from 'lucide-react';
 
 export const phases = [
   {
@@ -12,22 +12,30 @@ export const phases = [
   },
   {
     id: 1,
-    title: "Team Onboarding",
-    description: "Consent and process introduction",
-    icon: User,
+    title: "Team Onboarding & Upload",
+    description: "Upload employee list and select your profile",
+    icon: Upload,
     status: "pending",
     humanInput: true
   },
   {
     id: 2,
-    title: "Initial Exploration",
-    description: "Conversational mini-interview and task discovery",
-    icon: User,
+    title: "Initial AI Interview",
+    description: "AI-powered conversational exploration of your role",
+    icon: MessageSquare,
     status: "pending",
     humanInput: true
   },
   {
     id: 3,
+    title: "Validation Interview",
+    description: "Validate and refine discovered insights",
+    icon: User,
+    status: "pending",
+    humanInput: true
+  },
+  {
+    id: 4,
     title: "Deep Dive Assessment",
     description: "Task identification and HAS/automation rating",
     icon: User,
@@ -35,17 +43,9 @@ export const phases = [
     humanInput: true
   },
   {
-    id: 4,
+    id: 5,
     title: "Refinement & Scenarios",
     description: "Report review and scenario exploration",
-    icon: User,
-    status: "pending",
-    humanInput: true
-  },
-  {
-    id: 5,
-    title: "Validation & Planning",
-    description: "Final validation and action planning",
     icon: User,
     status: "pending",
     humanInput: true

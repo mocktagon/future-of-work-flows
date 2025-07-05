@@ -7,6 +7,7 @@ export const usePhaseData = () => {
   const [organizationData, setOrganizationData] = useState<OrganizationData | null>(null);
   const [employeeData, setEmployeeData] = useState<Record<string, InterviewPhaseData>>({});
   const [interviewProgress, setInterviewProgress] = useState<Record<number, string>>({});
+  const [showSampleReport, setShowSampleReport] = useState(false);
 
   const handlePhaseComplete = (data: any) => {
     console.log(`Phase ${currentPhase} completed with data:`, data);
@@ -25,15 +26,29 @@ export const usePhaseData = () => {
     }
   };
 
+  const handleViewSampleReport = () => {
+    setShowSampleReport(true);
+  };
+
+  const handleBackToAssessment = () => {
+    setShowSampleReport(false);
+  };
+
   const navigateToPhase = (phaseId: number) => {
+    setShowSampleReport(false);
     setCurrentPhase(phaseId);
   };
 
   const navigatePrevious = () => {
-    setCurrentPhase(Math.max(0, currentPhase - 1));
+    if (showSampleReport) {
+      setShowSampleReport(false);
+    } else {
+      setCurrentPhase(Math.max(0, currentPhase - 1));
+    }
   };
 
   const navigateNext = () => {
+    setShowSampleReport(false);
     setCurrentPhase(Math.min(6, currentPhase + 1));
   };
 
@@ -42,7 +57,10 @@ export const usePhaseData = () => {
     organizationData,
     employeeData,
     interviewProgress,
+    showSampleReport,
     handlePhaseComplete,
+    handleViewSampleReport,
+    handleBackToAssessment,
     navigateToPhase,
     navigatePrevious,
     navigateNext

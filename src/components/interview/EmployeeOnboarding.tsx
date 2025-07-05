@@ -26,28 +26,11 @@ interface EmployeeOnboardingProps {
 
 const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, organizationData }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [teamMemberName, setTeamMemberName] = useState('');
-  const [organizationName, setOrganizationName] = useState(organizationData?.organizationName || '');
   const [consentGiven, setConsentGiven] = useState(false);
   const [employeeList, setEmployeeList] = useState<EmployeeRecord[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState('');
 
   const onboardingSteps = [
-    {
-      id: 'welcome',
-      title: 'Welcome to AI Readiness Assessment',
-      icon: Users,
-      content: {
-        subtitle: 'Help us understand your organization\'s AI readiness',
-        description: 'This assessment will help identify the best opportunities for AI integration in your teams\' daily work.',
-        details: [
-          'We\'ll conduct 4 short, conversational interviews over the next steps',
-          'Each interview focuses on different aspects of your work',
-          'Your responses will be used to create a personalized AI readiness report',
-          'The entire process takes about 30-45 minutes total'
-        ]
-      }
-    },
     {
       id: 'consent',
       title: 'Consent & Privacy',
@@ -140,10 +123,10 @@ const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, org
       // Onboarding complete, submit data
       const selectedEmployeeData = employeeList.find(emp => emp.name === selectedEmployee);
       const onboardingData = {
-        teamMemberName: selectedEmployee || teamMemberName,
-        employeeName: selectedEmployee || teamMemberName,
+        teamMemberName: selectedEmployee,
+        employeeName: selectedEmployee,
         email: selectedEmployeeData?.email || '',
-        organizationName,
+        organizationName: organizationData?.organizationName || 'Organization',
         consentGiven,
         employeeList,
         selectedEmployee,
@@ -161,14 +144,10 @@ const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, org
   const canProceed = (() => {
     switch (currentStep) {
       case 0:
-        return employeeList.length === 0 ? 
-          (teamMemberName.trim() !== '' && organizationName.trim() !== '') :
-          true;
-      case 1:
         return consentGiven === true;
-      case 2:
+      case 1:
         return employeeList.length > 0 && selectedEmployee !== '';
-      case 3:
+      case 2:
         return true;
       default:
         return false;
@@ -186,9 +165,9 @@ const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, org
       <OnboardingStep
         title={onboardingSteps[currentStep].title}
         icon={onboardingSteps[currentStep].icon}
-        organizationName={organizationName}
+        organizationName={organizationData?.organizationName}
       >
-        {currentStep === 2 ? (
+        {currentStep === 1 ? (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -272,52 +251,16 @@ const EmployeeOnboarding: React.FC<EmployeeOnboardingProps> = ({ onComplete, org
                 Successfully loaded {employeeList.length} employees from the uploaded file.
               </div>
             )}
-
-            {employeeList.length === 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-800 mb-4">
-                  Don't have a team list ready? You can proceed with manual entry for now.
-                </p>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="teamMember" className="text-sm font-medium text-gray-700">
-                      Your Name
-                    </Label>
-                    <Input
-                      id="teamMember"
-                      type="text"
-                      placeholder="Enter your name"
-                      value={teamMemberName}
-                      onChange={(e) => setTeamMemberName(e.target.value)}
-                      className="w-full"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="organization" className="text-sm font-medium text-gray-700">
-                      Organization Name
-                    </Label>
-                    <Input
-                      id="organization"
-                      type="text"
-                      placeholder="Enter your organization name"
-                      value={organizationName}
-                      onChange={(e) => setOrganizationName(e.target.value)}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ) : (
           <OnboardingStepContent 
             step={onboardingSteps[currentStep]}
-            teamMemberName={teamMemberName}
-            setTeamMemberName={setTeamMemberName}
+            teamMemberName=""
+            setTeamMemberName={() => {}}
             consentGiven={consentGiven}
             setConsentGiven={setConsentGiven}
-            organizationName={organizationName}
-            setOrganizationName={setOrganizationName}
+            organizationName={organizationData?.organizationName || ''}
+            setOrganizationName={() => {}}
           />
         )}
       </OnboardingStep>

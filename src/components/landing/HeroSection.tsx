@@ -30,16 +30,20 @@ export const HeroSection = () => {
             </Badge>
           </div>
           
-          <h1 className="text-7xl font-bold mb-8 leading-tight">
-            <span className="text-gray-900">The World is Adopting AI</span>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+            <span className="text-gray-900">Stop Guessing on AI.</span>
             <br />
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">At Crazy Pace</span>
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">Start Winning With It.</span>
           </h1>
           
-          <p className="text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl mx-auto font-light">
-            This is your <span className="font-semibold text-blue-600">first step</span> towards AI transformation. 
-            Discover exactly where and how to implement AI in your organization—in just <span className="font-semibold text-purple-600">60 minutes</span>.
-          </p>
+          <div className="max-w-4xl mx-auto mb-12">
+            <p className="text-xl text-gray-600 mb-4 leading-relaxed font-light">
+              The AI hype is a distraction. The real breakthroughs are strategic.
+            </p>
+            <p className="text-xl text-gray-600 leading-relaxed font-light">
+              In a focused <span className="font-semibold text-purple-600">60-minute session</span>, we'll translate the chaos into clarity, delivering a prioritized action plan that targets the <span className="font-semibold text-blue-600">highest-impact opportunities</span> for your business.
+            </p>
+          </div>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Button 

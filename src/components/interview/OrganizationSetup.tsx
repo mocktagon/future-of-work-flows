@@ -13,6 +13,7 @@ import { Circle } from 'lucide-react';
 const OrganizationSetup = ({ onComplete }) => {
   const [formData, setFormData] = useState({
     organizationName: '',
+    email: '',
     totalEmployees: '',
     industry: '',
     departments: []
@@ -61,6 +62,7 @@ const OrganizationSetup = ({ onComplete }) => {
   };
 
   const isFormValid = formData.organizationName && 
+                     formData.email && 
                      formData.totalEmployees && 
                      formData.industry && 
                      formData.departments.length > 0;
@@ -97,6 +99,18 @@ const OrganizationSetup = ({ onComplete }) => {
                   value={formData.organizationName}
                   onChange={(e) => setFormData(prev => ({ ...prev, organizationName: e.target.value }))}
                   placeholder="Enter your organization name"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="email">Contact Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="your.email@company.com"
                   required
                 />
               </div>

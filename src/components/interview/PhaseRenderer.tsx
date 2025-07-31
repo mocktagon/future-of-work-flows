@@ -89,53 +89,33 @@ export const PhaseRenderer: React.FC<PhaseRendererProps> = ({
         );
       
       case 1:
-        return (
-          <EmployeeOnboarding 
-            onComplete={onComplete}
-            organizationData={organizationData}
-          />
-        );
-      
       case 2:
-        return (
-          <InitialInterview 
-            onComplete={onComplete}
-            organizationData={organizationData}
-            previousPhaseData={previousPhaseData[0]}
-          />
-        );
-      
       case 3:
-        return (
-          <ValidationInterview 
-            organizationData={organizationData}
-            onComplete={onComplete}
-            previousPhaseData={previousPhaseData}
-          />
-        );
-      
       case 4:
-        return (
-          <DeepDiveInterview 
-            onComplete={onComplete}
-            previousPhaseData={previousPhaseData[0]}
-          />
-        );
-      
       case 5:
-        return (
-          <RefinementInterview 
-            onComplete={onComplete}
-            previousPhaseData={previousPhaseData[0]}
-          />
-        );
-
       case 6:
         return (
-          <ReportsDashboard 
-            organizationData={organizationData}
-            employeeData={employeeData}
-          />
+          <div className="max-w-2xl mx-auto text-center py-20">
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-12 border border-blue-100">
+              <div className="text-6xl mb-6">🚀</div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Coming Soon
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                We're putting the finishing touches on the next phases of the AI readiness assessment. 
+                Your organization setup has been captured and we'll notify you when the full assessment is ready.
+              </p>
+              <div className="bg-white rounded-lg p-6 border border-gray-200">
+                <p className="text-sm text-gray-500 mb-2">What you can expect:</p>
+                <ul className="text-sm text-gray-700 space-y-2 text-left">
+                  <li>• Employee onboarding and profile upload</li>
+                  <li>• AI-powered conversational interviews</li>
+                  <li>• Task analysis and automation scoring</li>
+                  <li>• Comprehensive reports and action plans</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         );
       
       default:

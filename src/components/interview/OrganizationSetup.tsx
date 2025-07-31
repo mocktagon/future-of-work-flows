@@ -9,8 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Circle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const OrganizationSetup = ({ onComplete }) => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: '',
     email: '',
@@ -55,10 +59,50 @@ const OrganizationSetup = ({ onComplete }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Organization setup data:', formData);
-    onComplete(formData);
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('organizations')
+        .insert({
+          organization_name: formData.organizationName,
+          contact_email: formData.email,
+          total_employees: parseInt(formData.totalEmployees),
+          industry: formData.industry,
+          departments: formData.departments
+        })
+        .select()
+        .single();
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to save organization data. Please try again.",
+          variant: "destructive"
+        });
+        console.error('Supabase error:', error);
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: "Organization setup completed successfully!"
+      });
+
+      console.log('Organization saved:', data);
+      onComplete(formData);
+    } catch (error) {
+      console.error('Error saving organization:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const isFormValid = formData.organizationName && 
@@ -189,10 +233,10 @@ const OrganizationSetup = ({ onComplete }) => {
         <div className="flex justify-end">
           <Button 
             type="submit" 
-            disabled={!isFormValid}
+            disabled={!isFormValid || isSubmitting}
             className="px-8 py-2"
           >
-            Complete Organization Setup
+            {isSubmitting ? 'Saving...' : 'Complete Organization Setup'}
           </Button>
         </div>
       </form>

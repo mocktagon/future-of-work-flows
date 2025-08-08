@@ -25,6 +25,17 @@ export interface OrganizationData {
   departments: string[];
 }
 
+export interface DatabaseOrganizationData {
+  id: string;
+  organization_name: string;
+  contact_email: string;
+  total_employees: number;
+  industry: string;
+  departments: string[];
+  created_at: string;
+  updated_at: string;
+}
+
 export interface EmployeeData {
   employeeName: string;
   email?: string;

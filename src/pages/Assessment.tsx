@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PhaseRenderer } from '@/components/interview/PhaseRenderer';
-import { usePhaseData } from '@/hooks/usePhaseData';
+import { useAssessmentFlow } from '@/hooks/useAssessmentFlow';
 
 const Assessment = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Assessment = () => {
     navigateToPhase,
     navigatePrevious,
     navigateNext
-  } = usePhaseData();
+  } = useAssessmentFlow();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
